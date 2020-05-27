@@ -1,0 +1,25 @@
+{
+  "name": "edy-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/kataoka029/edy-bot.git",
+  "author": "kataoka029 <kataoka029@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^6.8.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
+    "lodash": "^4.17.15",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.4",
+    "pg": "^8.2.1"
+  }
+}
