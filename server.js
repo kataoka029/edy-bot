@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
-app.use(express.static("../frontend/public"));
-app.use(express.static("../frontend/src"));
+app.use(cors);
+// app.use(express.static("../frontend/public"));
+// app.use(express.static("../frontend/src"));
 app.use(morgan("dev"));
 app.use("", require("./routers/rootRouter.js"));
 app.use("/api", express.json());
