@@ -39,7 +39,7 @@ const createReply = (event) => {
   };
 };
 
-// 返事（replyMessageを配列にすれば複数送信可能）
+// リプライ（replyMessageを配列にすれば複数送信可能）
 bot.reply = async (req, res) => {
   try {
     const events = req.body.events;
