@@ -15,7 +15,7 @@ const fetch = require("node-fetch");
 const url = "https://edy-api.herokuapp.com/";
 
 // 相手からのメッセージをDBに追加
-bot.insertMessageFromUser = (req, res) => {
+bot.insertUserMessage = (req, res) => {
   const events = req.body.events;
   fetch(`${url}/api/messages`, {
     method: "POST",
@@ -27,7 +27,7 @@ bot.insertMessageFromUser = (req, res) => {
 };
 
 // リプライオブジェクトを作成
-const createMessageToUser = (event) => {
+const createReply = (event) => {
   const text = event.message.text;
   return {
     type: "text",
@@ -36,23 +36,23 @@ const createMessageToUser = (event) => {
 };
 
 // 相手に返事（replyMessageを配列にすれば複数送信可能）
-bot.replyToUser = async (req, res) => {
+bot.reply = async (req, res) => {
   const event = req.body.events[0];
-  const replyMessage = createMessageToUser(event);
+  const replyMessage = createReply(event);
   await client.replyMessage(event.replyToken, replyMessage);
 };
 
 // こちらからのメッセージをDBに追加
-bot.insertMessageToUser = (req, res) => {
+bot.reply = (req, res) => {
   const events = req.body.events;
   const replyEvents = _.cloneDeep(events);
-  const replyMessage = createMessageToUser(events[0]);
+  const replyObject = createReply(events[0]);
   replyEvents[0].replyToken = "_";
   replyEvents[0].source.userId = "_";
   replyEvents[0].source.type = "edy";
   replyEvents[0].message.id = "_";
-  replyEvents[0].message.type = replyMessage.type;
-  replyEvents[0].message.text = replyMessage.text;
+  replyEvents[0].message.type = replyObject.type;
+  replyEvents[0].message.text = replyObject.text;
   fetch(`${url}/api/messages`, {
     method: "POST",
     headers: {
