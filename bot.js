@@ -37,16 +37,18 @@ const createReply = (event) => {
 
 // 相手に返事（replyMessageを配列にすれば複数送信可能）
 bot.reply = async (req, res) => {
-  const event = req.body.events[0];
-  const replyMessage = createReply(event);
-  await client.replyMessage(event.replyToken, replyMessage);
+  const events = req.body.events;
+  const event = events[0];
+  const replyObject = createReply(event);
+  await client.replyMessage(event.replyToken, replyObject);
 };
 
 // こちらからのメッセージをDBに追加
-bot.reply = (req, res) => {
+bot.insertReply = (req, res) => {
   const events = req.body.events;
+  const event = events[0];
+  const replyObject = createReply(event);
   const replyEvents = _.cloneDeep(events);
-  const replyObject = createReply(events[0]);
   replyEvents[0].replyToken = "_";
   replyEvents[0].source.userId = "_";
   replyEvents[0].source.type = "edy";
