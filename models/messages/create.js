@@ -15,8 +15,8 @@ const createMessage = (req, res) => {
       line_message_type: event.message.type,
       line_message_text: event.message.text,
     })
-    .then((returnValue) => {
-      res.status(201).send(returnValue);
+    .catch((err) => {
+      console.log(`ERROR in createMessage(): ${err}`);
     });
   res.end();
 };

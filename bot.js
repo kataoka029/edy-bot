@@ -12,18 +12,22 @@ const bot = {};
 
 // DBとのやりとりのための設定
 const fetch = require("node-fetch");
-const url = "https://edy-api.herokuapp.com/";
+const url = "https://ccee4f3076b5.ngrok.io/";
 
-// 相手からのメッセージをDBに追加
+// ユーザーメッセージをDBに追加
 bot.insertUserMessage = (req, res) => {
-  const events = req.body.events;
-  fetch(`${url}/api/messages`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(events),
-  });
+  try {
+    const events = req.body.events;
+    fetch(`${url}/api/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(events),
+    });
+  } catch (err) {
+    console.error(`ERROR in bot.insertUserMessage(): ${err}`);
+  }
 };
 
 // リプライオブジェクトを作成
@@ -35,33 +39,41 @@ const createReply = (event) => {
   };
 };
 
-// 相手に返事（replyMessageを配列にすれば複数送信可能）
+// 返事（replyMessageを配列にすれば複数送信可能）
 bot.reply = async (req, res) => {
-  const events = req.body.events;
-  const event = events[0];
-  const replyObject = createReply(event);
-  await client.replyMessage(event.replyToken, replyObject);
+  try {
+    const events = req.body.events;
+    const event = events[0];
+    const replyObject = createReply(event);
+    await client.replyMessage(event.replyToken, replyObject);
+  } catch (err) {
+    console.error(`ERROR in bot.reply(): ${err}`);
+  }
 };
 
-// こちらからのメッセージをDBに追加
-bot.insertReply = (req, res) => {
-  const events = req.body.events;
-  const event = events[0];
-  const replyObject = createReply(event);
-  const replyEvents = _.cloneDeep(events);
-  replyEvents[0].replyToken = "_";
-  replyEvents[0].source.userId = "_";
-  replyEvents[0].source.type = "edy";
-  replyEvents[0].message.id = "_";
-  replyEvents[0].message.type = replyObject.type;
-  replyEvents[0].message.text = replyObject.text;
-  fetch(`${url}/api/messages`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(replyEvents),
-  });
+// リプライメッセージをDBに追加
+bot.insertReply = async (req, res) => {
+  try {
+    const events = req.body.events;
+    const event = events[0];
+    const replyObject = createReply(event);
+    const replyEvents = _.cloneDeep(events);
+    replyEvents[0].replyToken = "_";
+    replyEvents[0].source.userId = "_";
+    replyEvents[0].source.type = "edy";
+    replyEvents[0].message.id = "_";
+    replyEvents[0].message.type = replyObject.type;
+    replyEvents[0].message.text = replyObject.text;
+    fetch(`${url}/api/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(replyEvents),
+    });
+  } catch (err) {
+    console.error(`ERROR in bot.insertReply(): ${err}`);
+  }
 };
 
 // bot.client = client;
