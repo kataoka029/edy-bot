@@ -12,7 +12,7 @@ const bot = {};
 
 // DBとのやりとりのための設定
 const fetch = require("node-fetch");
-const url = "https://ccee4f3076b5.ngrok.io/";
+const url = "https://ec9b79b8d2ca.ngrok.io/";
 
 // ユーザーメッセージをDBに追加
 bot.insertUserMessage = (req, res) => {
