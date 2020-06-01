@@ -12,13 +12,13 @@ const bot = {};
 
 // DBとのやりとりのための設定
 const fetch = require("node-fetch");
-const url = "https://ec9b79b8d2ca.ngrok.io/";
+const url = "https://cd0594dff662.ngrok.io/";
 
 // ユーザーメッセージをDBに追加
-bot.insertUserMessage = (req, res) => {
+bot.insertUserMessage = async (req, res) => {
   try {
     const events = req.body.events;
-    fetch(`${url}/api/messages`, {
+    await fetch(`${url}/api/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -45,7 +45,7 @@ bot.reply = async (req, res) => {
     const events = req.body.events;
     const event = events[0];
     const replyObject = createReply(event);
-    await client.replyMessage(event.replyToken, replyObject);
+    client.replyMessage(event.replyToken, replyObject);
   } catch (err) {
     console.error(`ERROR in bot.reply(): ${err}`);
   }
@@ -64,13 +64,13 @@ bot.insertReply = async (req, res) => {
     replyEvents[0].message.id = "_";
     replyEvents[0].message.type = replyObject.type;
     replyEvents[0].message.text = replyObject.text;
-    fetch(`${url}/api/messages`, {
+    await fetch(`${url}/api/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(replyEvents),
-    });
+    }).then(() => console.log("insertReply() is DONE!!"));
   } catch (err) {
     console.error(`ERROR in bot.insertReply(): ${err}`);
   }

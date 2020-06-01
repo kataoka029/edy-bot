@@ -5,8 +5,8 @@ const webhookRouter = express.Router();
 webhookRouter.post("/", bot.lineMiddleware, async (req, res) => {
   try {
     // DBへの追加、リプライ（ioは中でrequireする必要あり）
-    bot.insertUserMessage(req, res);
-    await bot.reply(req, res);
+    await bot.insertUserMessage(req, res);
+    bot.reply(req, res);
     await bot.insertReply(req, res);
 
     // メッセージの受信をクライアントサイドに通知

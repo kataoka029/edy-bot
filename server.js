@@ -19,9 +19,9 @@ app.use("/api", express.json());
 const server = require("http").createServer(app);
 const io = require("socket.io").listen(server);
 io.on("connection", (socket) => {
-  console.log("User connected");
+  console.log(`User connected at ${new Date().toLocaleString("ja")}`);
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    console.log(`User disconnected at ${new Date().toLocaleString("ja")}`);
   });
 });
 
