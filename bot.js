@@ -12,13 +12,14 @@ const bot = {};
 
 // DBとのやりとりのための設定
 const fetch = require("node-fetch");
-const url = "https://db82a841630e.ngrok.io/";
+const url = "http://localhost:4000/";
 
 // ユーザーメッセージをDBに追加
 bot.insertUserMessage = async (req, res) => {
   try {
     const events = req.body.events;
     await fetch(`${url}/api/messages`, {
+      // await fetch(`/api/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -65,6 +66,7 @@ bot.insertReply = async (req, res) => {
     replyEvents[0].message.type = replyObject.type;
     replyEvents[0].message.text = replyObject.text;
     await fetch(`${url}/api/messages`, {
+      // await fetch(`/api/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
