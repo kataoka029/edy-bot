@@ -7,14 +7,6 @@ const getMessages = (req, res) => {
     .where({ user_id: userId })
     .orderBy("created_at")
     .select();
-  // .then((messages) => {
-  //   knex.destroy();
-  //   return messages;
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  //   knex.destroy();
-  // });
 };
 
 module.exports = getMessages;

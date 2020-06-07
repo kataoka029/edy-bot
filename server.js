@@ -12,7 +12,7 @@ const corsOption = {
 app.use(cors(corsOption));
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.use("", require("./routers/rootRouter.js"));
+app.use("", require("./routers/index.js"));
 app.use("/api", express.json());
 
 // socket.ioの設定
