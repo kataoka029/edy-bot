@@ -4,7 +4,11 @@ const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 const corsOption = {
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "https://edy-manager.herokuapp.com/",
+  ],
   credentials: true,
 };
 
