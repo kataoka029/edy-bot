@@ -4,7 +4,7 @@ const createMessage = require("../../models/messages/create.js");
 
 const messagesRouter = express.Router();
 
-messagesRouter.get("/", (req, res) => {
+messagesRouter.get("/:userId", (req, res) => {
   getMessages(req)
     .then((messages) => res.send(messages))
     .catch((err) => res.status(400).send(err.message));
