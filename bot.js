@@ -12,7 +12,10 @@ const bot = {};
 
 // DBとのやりとりのための設定
 const fetch = require("node-fetch");
-const url = "http://localhost:4000/";
+const url =
+  process.env.NODE_ENV === "production"
+    ? "https://edy-api.herokuapp.com/"
+    : "http://localhost:4000/";
 
 // ユーザーメッセージをDBに追加
 bot.insertUserMessage = async (events) => {
