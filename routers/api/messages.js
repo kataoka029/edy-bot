@@ -8,10 +8,10 @@ messagesRouter.get("/", (req, res) => {
   return;
 });
 
-messagesRouter.get("/:userId", (req, res) => {
+messagesRouter.get("/:lineUserId", (req, res) => {
   getMessages(req)
     .then((messages) => res.send(messages))
-    .catch((err) => res.status(400).send(err.message));
+    .catch((err) => console.log(`ERROR in getMessage(): ${err}`));
 });
 
 messagesRouter.post("/", (req, res) => {

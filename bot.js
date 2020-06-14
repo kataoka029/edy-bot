@@ -57,17 +57,15 @@ bot.reply = async (events) => {
 // リプライメッセージをDBに追加
 bot.insertReply = async (events) => {
   try {
-    const event = events[0];
     const replyObject = createReply(events);
     const replyEvents = _.cloneDeep(events);
     replyEvents[0].replyToken = "_";
-    replyEvents[0].source.userId = "_";
+    // replyEvents[0].source.userId = "_";
     replyEvents[0].source.type = "edy";
     replyEvents[0].message.id = "_";
     replyEvents[0].message.type = replyObject.type;
     replyEvents[0].message.text = replyObject.text;
     await fetch(`${url}/api/messages`, {
-      // await fetch(`/api/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",

@@ -2,12 +2,13 @@ const config = require("../../knexfile.js").development;
 const knex = require("knex")(config);
 
 const getMessages = (req, res) => {
-  const userId = Number(req.params.userId);
-  if (!userId) return;
+  const lineUserId = req.params.lineUserId;
+  if (!lineUserId) return;
   return knex("messages")
-    .where({ user_id: userId })
+    .where({ line_user_id: lineUserId })
     .orderBy("created_at")
-    .select();
+    .select()
+    .catch((err) => console.log("ERROR in getMessages(): ", err));
 };
 
 module.exports = getMessages;
