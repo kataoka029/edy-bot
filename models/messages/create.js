@@ -4,7 +4,7 @@ const knex = require("knex")(config);
 const createMessage = (req, res) => {
   const event = req.body[0];
   return knex("messages").insert({
-    user_id: 1,
+    user_id: 10001,
     line_type: event.type,
     line_reply_token: event.replyToken,
     line_user_id: event.source.userId,
