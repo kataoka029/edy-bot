@@ -14,7 +14,7 @@ const bot = {};
 const fetch = require("node-fetch");
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://edy-api.herokuapp.com/"
+    ? "https://edy-bot.herokuapp.com/"
     : "http://localhost:4000/";
 
 // ユーザーメッセージをDBに追加
