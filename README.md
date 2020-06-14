@@ -8,4 +8,4 @@ https://github.com/kataoka029/edy-manager
 ## ボット
 https://github.com/kataoka029/edy-bot
 ## 決済
-https://github.com/kataoka029/edy-bot
+https://github.com/kataoka029/edy-payment
