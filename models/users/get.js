@@ -2,15 +2,11 @@ const config = require("../../knexfile.js").development;
 const knex = require("knex")(config);
 
 const getUsers = (req, res) => {
-  // return knex("messages")
-
-  //   .orderBy("created_at")
-  //   .select();
   return knex.raw(`
     SELECT
-      messages.user_id,
-      messages.line_message_text,
-      messages.created_at
+      messages.user_id AS "userId",
+      messages.line_message_text AS "userText",
+      messages.created_at AS "userDate"
     FROM messages INNER JOIN 
       (SELECT
         user_id,

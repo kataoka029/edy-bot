@@ -4,6 +4,10 @@ const createMessage = require("../../models/messages/create.js");
 
 const messagesRouter = express.Router();
 
+messagesRouter.get("/", (req, res) => {
+  return;
+});
+
 messagesRouter.get("/:userId", (req, res) => {
   getMessages(req)
     .then((messages) => res.send(messages))
