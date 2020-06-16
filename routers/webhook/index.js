@@ -4,6 +4,7 @@ const bot = require("../../bot.js");
 const webhookRouter = express.Router();
 webhookRouter.post("/", bot.lineMiddleware, async (req, res) => {
   try {
+    // console.log("ここまできてる？");
     const events = req.body.events;
 
     // DBへの追加、リプライ

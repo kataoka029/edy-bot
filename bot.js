@@ -77,6 +77,6 @@ bot.insertReply = async (events) => {
   }
 };
 
-// bot.client = client;
+bot.client = client;
 bot.lineMiddleware = line.middleware(config);
 module.exports = bot;

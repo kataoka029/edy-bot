@@ -1,6 +1,7 @@
 const express = require("express");
 const config = require("../../../knexfile.js").development;
 const knex = require("knex")(config);
+const bot = require("../../../bot");
 
 const messagesRouter = express.Router();
 
@@ -39,6 +40,16 @@ messagesRouter.post("/", (req, res) => {
     })
     .then((message) => res.send(message))
     .catch((err) => console.log("ERROR in POST /api/messages: ", err));
+});
+
+messagesRouter.post("/:lineUserId", (req, res) => {
+  const lineUserId = req.params.lineUserId;
+  if (!lineUserId) return;
+  const message = req.body[0].message;
+  bot.client
+    .pushMessage(lineUserId, message)
+    .then(() => console.log("message was pushed into line"))
+    .catch((err) => console.log(err));
 });
 
 module.exports = messagesRouter;
