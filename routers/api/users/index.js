@@ -1,8 +1,13 @@
-const config = require("../../knexfile.js").development;
+const express = require("express");
+const config = require("../../../knexfile.js").development;
 const knex = require("knex")(config);
 
-const getUsers = (req, res) => {
-  return knex.raw(`
+const usersRouter = express.Router();
+
+usersRouter.get("/", (req, res) => {
+  return knex
+    .raw(
+      `
     SELECT
       messages.line_user_id AS "lineUserId",
       messages.user_id AS "userId",
@@ -15,7 +20,10 @@ const getUsers = (req, res) => {
       FROM messages
       GROUP BY line_user_id) AS sub
       ON messages.line_user_id = sub.line_user_id AND messages.created_at = sub.created_at
-    ORDER BY messages.created_at DESC;`);
-};
+    ORDER BY messages.created_at DESC;`
+    )
+    .then((users) => res.send(users.rows))
+    .catch((err) => res.status(400).send(err.message));
+});
 
-module.exports = getUsers;
+module.exports = usersRouter;

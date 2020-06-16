@@ -13,11 +13,11 @@ module.exports = {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: "./models/migrations",
+      directory: "./db/migrations",
       tableName: "knex_migrations",
     },
     seeds: {
-      directory: "./models/seeds",
+      directory: "./db/seeds",
     },
   },
 
