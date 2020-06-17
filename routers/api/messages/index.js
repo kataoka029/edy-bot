@@ -38,7 +38,7 @@ messagesRouter.post("/", (req, res) => {
       line_message_type: event.message.type,
       line_message_text: event.message.text,
     })
-    .then((message) => res.send(message))
+    .then((message) => res.status(201).send(message))
     .catch((err) => console.log("ERROR in POST /api/messages: ", err));
 });
 
@@ -49,6 +49,7 @@ messagesRouter.post("/:lineUserId", (req, res) => {
   bot.client
     .pushMessage(lineUserId, message)
     .then(() => console.log("message was pushed into line"))
+    .then(res.status(201).send())
     .catch((err) => console.log(err));
 });
 
