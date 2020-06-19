@@ -6,7 +6,7 @@ const bot = require("../../../bot");
 const messagesRouter = express.Router();
 
 messagesRouter.get("/", (req, res) => {
-  return;
+  return [];
 });
 
 messagesRouter.get("/:lineUserId", (req, res) => {
@@ -30,6 +30,7 @@ messagesRouter.post("/", (req, res) => {
   return knex("messages")
     .insert({
       user_id: userId,
+      read: 0,
       line_type: event.type,
       line_reply_token: event.replyToken,
       line_user_id: event.source.userId,
