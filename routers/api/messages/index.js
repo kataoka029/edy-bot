@@ -11,7 +11,7 @@ messagesRouter.get("/", (req, res) => {
 
 messagesRouter.get("/:lineUserId", (req, res) => {
   const lineUserId = req.params.lineUserId;
-  if (!lineUserId) return;
+  if (!lineUserId) return [];
   return knex("messages")
     .where({ line_user_id: lineUserId })
     .orderBy("created_at")
@@ -30,7 +30,7 @@ messagesRouter.post("/", (req, res) => {
   return knex("messages")
     .insert({
       user_id: userId,
-      read: 0,
+      unread: 1,
       line_type: event.type,
       line_reply_token: event.replyToken,
       line_user_id: event.source.userId,

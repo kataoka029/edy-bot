@@ -4,7 +4,7 @@ exports.up = function (knex) {
       return knex.schema.createTable("messages", (t) => {
         t.increments().primary();
         t.integer("user_id").notNullable();
-        t.integer("read").notNullable();
+        t.integer("unread").notNullable();
         t.string("line_type").notNullable();
         t.string("line_reply_token").notNullable();
         t.string("line_user_id").notNullable();

@@ -5,7 +5,7 @@ exports.seed = function (knex) {
       return knex("messages").insert([
         {
           user_id: 10001,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "_",
           line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
@@ -19,7 +19,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 10001,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "4d33481b9b184aa8962311c100120207",
           line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
@@ -33,7 +33,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 10001,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "_",
           line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
@@ -47,7 +47,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 0,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "_",
           line_user_id: "Tf42bb47c877c9e5543ca4eda7661e142",
@@ -61,7 +61,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 0,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "5d33481b9b184aa8962311c100120207",
           line_user_id: "Tf42bb47c877c9e5543ca4eda7661e142",
@@ -75,7 +75,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 0,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "_",
           line_user_id: "Vf42bb47c877c9e5543ca4eda7661e142",
@@ -89,7 +89,7 @@ exports.seed = function (knex) {
         },
         {
           user_id: 0,
-          read: 0,
+          unread: 1,
           line_type: "message",
           line_reply_token: "6d33481b9b184aa8962311c100120207",
           line_user_id: "Vf42bb47c877c9e5543ca4eda7661e142",
