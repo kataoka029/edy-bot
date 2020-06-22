@@ -3,8 +3,6 @@ exports.up = function (knex) {
     if (!exists) {
       return knex.schema.createTable("messages", (t) => {
         t.increments().primary();
-        t.integer("user_id").notNullable();
-        t.integer("unread").notNullable();
         t.string("line_type").notNullable();
         t.string("line_reply_token").notNullable();
         t.string("line_user_id").notNullable();
@@ -12,6 +10,7 @@ exports.up = function (knex) {
         t.string("line_message_id").notNullable();
         t.string("line_message_type").notNullable();
         t.string("line_message_text", 1000);
+        t.integer("unread").notNullable();
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
         t.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
       });
