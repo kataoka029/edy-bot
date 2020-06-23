@@ -9,6 +9,7 @@ usersRouter.get("/", (req, res) => {
     .raw(
       `SELECT
       messages.line_user_id AS "lineUserId",
+      users.user_id AS "userId",
       messages.line_message_text AS "userText",
       messages.created_at AS "userDate",
       sub2.count AS "unreadCount"
@@ -30,6 +31,8 @@ usersRouter.get("/", (req, res) => {
         GROUP BY line_user_id
         ) AS sub2
           ON messages.line_user_id = sub2.line_user_id
+      LEFT JOIN users
+        ON messages.line_user_id = users.line_user_id
     ORDER BY messages.created_at DESC`
     )
     .then((users) => res.send(users.rows))
