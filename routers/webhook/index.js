@@ -3,7 +3,6 @@ const express = require("express");
 const { lineMiddleware } = require("../../config");
 const { insertUserMessage, insertReply } = require("../../db");
 const { reply } = require("../../bot");
-const io = require("../../server.js");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
@@ -20,6 +19,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
     reply(events);
     await insertReply(events);
 
+    const io = require("../../server.js");
     io.emit("refetch", { event });
   } else if (event.type === "follow") {
     console.log("FOLLOW - ", event);
