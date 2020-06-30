@@ -1,7 +1,8 @@
 const express = require("express");
 const config = require("../../../knexfile.js").development;
 const knex = require("knex")(config);
-const bot = require("../../../bot");
+
+const { client } = require("../../../config");
 
 const messagesRouter = express.Router();
 
@@ -11,7 +12,6 @@ messagesRouter.get("/", (req, res) => {
 
 messagesRouter.get("/:lineUserId", (req, res) => {
   const lineUserId = req.params.lineUserId;
-  // if (!lineUserId) return [];
   return knex("messages")
     .where({ line_user_id: lineUserId })
     .orderBy("created_at")
@@ -42,9 +42,8 @@ messagesRouter.post("/", (req, res) => {
 
 messagesRouter.post("/:lineUserId", (req, res) => {
   const lineUserId = req.params.lineUserId;
-  // if (!lineUserId) return;
   const message = req.body[0].message;
-  bot.client
+  client
     .pushMessage(lineUserId, message)
     .then(res.status(201).send())
     .then(() => console.log("SUCCESS - POST /messgaes/:lineUserId"))
@@ -53,7 +52,6 @@ messagesRouter.post("/:lineUserId", (req, res) => {
 
 messagesRouter.patch("/:lineUserId/read", (req, res) => {
   const lineUserId = req.params.lineUserId;
-  // if (!lineUserId) return;
   return knex("messages")
     .where({ line_user_id: lineUserId })
     .update({ unread: 0 })

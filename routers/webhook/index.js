@@ -1,24 +1,23 @@
 const express = require("express");
-const bot = require("../../bot.js");
+// const bot = require("../../bot.js");
+const { lineMiddleware } = require("../../config");
+const { insertUserMessage, insertReply } = require("../../db");
+const { reply } = require("../../bot");
 
 const webhookRouter = express.Router();
-webhookRouter.post("/", bot.lineMiddleware, async (req, res) => {
-  try {
-    console.log("ここまできてる？");
-    const events = req.body.events;
+webhookRouter.post("/", lineMiddleware, async (req, res) => {
+  console.log("Webhook is comming!");
+  const events = req.body.events;
 
-    // DBへの追加、リプライ
-    await bot.insertUserMessage(events);
-    bot.reply(events);
-    await bot.insertReply(events);
+  // DBへの追加、リプライ
+  await insertUserMessage(events);
+  reply(events);
+  await insertReply(events);
 
-    // メッセージの受信をクライアントサイドに通知（ioは中でrequireする必要あり）
-    const io = require("../../server.js");
-    const event = events[0];
-    io.emit("refetch", { event });
-  } catch (err) {
-    console.log(`ERROR in POST /webhook: ${err}`);
-  }
+  // メッセージの受信をクライアントサイドに通知（ioは中でrequireする必要あり）
+  const io = require("../../server.js");
+  const event = events[0];
+  io.emit("refetch", { event });
 });
 
 module.exports = webhookRouter;
