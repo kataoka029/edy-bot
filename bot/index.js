@@ -17,4 +17,4 @@ const reply = async (events) => {
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
-module.exports = { reply };
+module.exports = { createReply, reply };
