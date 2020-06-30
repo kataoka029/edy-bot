@@ -1,6 +1,6 @@
 const { client } = require("../config");
 
-const createReply = (events) => {
+const createReplyObject = (events) => {
   const text = events[0].message.text;
   return {
     type: "text",
@@ -10,11 +10,11 @@ const createReply = (events) => {
 
 const reply = async (events) => {
   const event = events[0];
-  const replyObject = createReply(events);
+  const replyObject = createReplyObject(events);
   client
     .replyMessage(event.replyToken, [replyObject])
     .then(() => console.log("SUCCESS - reply()"))
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
-module.exports = { createReply, reply };
+module.exports = { createReplyObject, reply };

@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const { url } = require("../config");
-const { createReply } = require("../bot");
+const { createReplyObject } = require("../bot");
 const _ = require("lodash");
 
 const insertUserMessage = async (events) => {
@@ -15,8 +15,8 @@ const insertUserMessage = async (events) => {
     .catch((err) => console.log("ERROR - insertUserMessage() - ", err));
 };
 
-const insertReply = async (events) => {
-  const replyObject = createReply(events);
+const insertReplyMessage = async (events) => {
+  const replyObject = createReplyObject(events);
   const replyEvents = _.cloneDeep(events);
   replyEvents[0].replyToken = "_";
   replyEvents[0].source.type = "edy";
@@ -30,8 +30,20 @@ const insertReply = async (events) => {
     },
     body: JSON.stringify(replyEvents),
   })
-    .then(() => console.log("SUCCESS - insertReply()"))
-    .catch((err) => console.log("ERROR - insertReply() - ", err));
+    .then(() => console.log("SUCCESS - insertReplyMessage()"))
+    .catch((err) => console.log("ERROR - insertReplyMessage() - ", err));
 };
 
-module.exports = { insertUserMessage, insertReply };
+const insertUser = async (events) => {
+  await fetch(`${url}api/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(events),
+  })
+    .then(() => console.log("SUCCESS - insertUser()"))
+    .catch((err) => console.log("ERROR - insertUser() - ", err));
+};
+
+module.exports = { insertUserMessage, insertReplyMessage, insertUser };

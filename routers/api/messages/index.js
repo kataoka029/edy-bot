@@ -63,3 +63,11 @@ messagesRouter.patch("/:lineUserId/read", (req, res) => {
 });
 
 module.exports = messagesRouter;
+
+// FOLLOW -  {
+//   type: 'follow',
+//   replyToken: '3df65ce16e8b44d7919ea2e8530b20e0',
+//   source: { userId: 'Uf42bb47c877c9e5543ca4eda7661e142', type: 'user' },
+//   timestamp: 1593525899217,
+//   mode: 'active'
+// }

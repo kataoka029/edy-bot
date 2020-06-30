@@ -39,4 +39,19 @@ usersRouter.get("/", (req, res) => {
     .catch((err) => res.status(400).send(err.message));
 });
 
+usersRouter.post("/", (req, res) => {
+  const event = req.body[0];
+  const user = {
+    line_user_id: event.source.userId,
+    last_name: "_",
+    first_name: "_",
+    email: "_",
+  };
+  return knex("users")
+    .insert(user)
+    .then(() => res.status(201).send())
+    .then(() => "SUCCESS - POST /users")
+    .catch((err) => console.log("ERROR - POST /users - ", err));
+});
+
 module.exports = usersRouter;
