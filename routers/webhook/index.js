@@ -9,8 +9,10 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const events = req.body.events;
   const event = events[0];
 
+  console.log("EVENT - ", event);
+
   if (event.type === "message") {
-    console.log("MESSAGE!", event);
+    console.log("MESSAGE - ", event);
     // DBへの追加、リプライ
     await insertUserMessage(events);
     reply(events);
@@ -21,7 +23,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
     const event = events[0];
     io.emit("refetch", { event });
   } else if (event.type === "follow") {
-    console.log("FOLLOW!", event);
+    console.log("FOLLOW - ", event);
   } else {
     console.log(`${event.type.toUpperCase()} is not defined yet.`);
   }
