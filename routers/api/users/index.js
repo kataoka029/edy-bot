@@ -48,10 +48,17 @@ usersRouter.post("/", (req, res) => {
     email: "_",
   };
   return knex("users")
-    .insert(user)
-    .then(() => res.status(201).send())
-    .then(() => "SUCCESS - POST /users")
-    .catch((err) => console.log("ERROR - POST /users - ", err));
+    .select()
+    .where("line_user_id", event.source.userId)
+    .then((rows) => {
+      if (rows.length === 0) {
+        knex("users")
+          .insert(user)
+          .then(() => res.status(201).send())
+          .then(() => "SUCCESS - POST /users")
+          .catch((err) => console.log("ERROR - POST /users - ", err));
+      }
+    });
 });
 
 module.exports = usersRouter;
