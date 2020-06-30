@@ -4,7 +4,7 @@ const { createReply } = require("../bot");
 const _ = require("lodash");
 
 const insertUserMessage = async (events) => {
-  await fetch(`${url}/api/messages`, {
+  await fetch(`${url}api/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -23,7 +23,7 @@ const insertReply = async (events) => {
   replyEvents[0].message.id = "_";
   replyEvents[0].message.type = replyObject.type;
   replyEvents[0].message.text = replyObject.text;
-  await fetch(`${url}/api/messages`, {
+  await fetch(`${url}api/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json; charset=utf-8",

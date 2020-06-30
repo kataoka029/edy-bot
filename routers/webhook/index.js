@@ -3,15 +3,14 @@ const express = require("express");
 const { lineMiddleware } = require("../../config");
 const { insertUserMessage, insertReply } = require("../../db");
 const { reply } = require("../../bot");
+const io = require("../../server.js");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const events = req.body.events;
   const event = events[0];
 
-  console.log("EVENT - ", event);
   // メッセージの受信をクライアントサイドに通知（ioは中でrequireする必要あり）
-  const io = require("../../server.js");
   // const event = events[0];
 
   if (event.type === "message") {
