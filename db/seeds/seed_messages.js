@@ -6,7 +6,7 @@ exports.seed = function (knex) {
         {
           line_type: "message",
           line_reply_token: "_",
-          line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
+          line_user_id: "Sf42bb47c877c9e5543ca4eda7661e142",
           line_user_type: "edy",
           line_message_id: "_",
           line_message_type: "text",
@@ -19,7 +19,7 @@ exports.seed = function (knex) {
         {
           line_type: "message",
           line_reply_token: "4d33481b9b184aa8962311c100120207",
-          line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
+          line_user_id: "Sf42bb47c877c9e5543ca4eda7661e142",
           line_user_type: "user",
           line_message_id: "12011694017334",
           line_message_type: "text",
@@ -32,7 +32,7 @@ exports.seed = function (knex) {
         {
           line_type: "message",
           line_reply_token: "_",
-          line_user_id: "Uf42bb47c877c9e5543ca4eda7661e142",
+          line_user_id: "Sf42bb47c877c9e5543ca4eda7661e142",
           line_user_type: "edy",
           line_message_id: "_",
           line_message_type: "text",

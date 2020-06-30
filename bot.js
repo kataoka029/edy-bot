@@ -60,7 +60,6 @@ bot.insertReply = async (events) => {
     const replyObject = createReply(events);
     const replyEvents = _.cloneDeep(events);
     replyEvents[0].replyToken = "_";
-    // replyEvents[0].source.userId = "_";
     replyEvents[0].source.type = "edy";
     replyEvents[0].message.id = "_";
     replyEvents[0].message.type = replyObject.type;

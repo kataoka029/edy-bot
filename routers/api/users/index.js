@@ -9,7 +9,7 @@ usersRouter.get("/", (req, res) => {
     .raw(
       `SELECT
       messages.line_user_id AS "lineUserId",
-      users.user_id AS "userId",
+      users.id AS "userId",
       messages.line_message_text AS "userText",
       messages.created_at AS "userDate",
       sub2.count AS "unreadCount"

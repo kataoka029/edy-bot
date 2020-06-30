@@ -4,7 +4,6 @@ exports.up = function (knex) {
       return knex.schema.createTable("users", (t) => {
         t.increments().primary();
         t.string("line_user_id").notNullable();
-        t.integer("user_id").notNullable();
         t.string("last_name").notNullable();
         t.string("first_name").notNullable();
         t.string("email").notNullable();
