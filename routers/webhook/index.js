@@ -6,8 +6,9 @@ const { reply } = require("../../bot");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
-  console.log("Webhook is comming!");
   const events = req.body.events;
+
+  console.log("START WEBHOOK!", events);
 
   // DBへの追加、リプライ
   await insertUserMessage(events);
