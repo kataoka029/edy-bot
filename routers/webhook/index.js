@@ -10,6 +10,9 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const event = events[0];
 
   console.log("EVENT - ", event);
+  // メッセージの受信をクライアントサイドに通知（ioは中でrequireする必要あり）
+  const io = require("../../server.js");
+  // const event = events[0];
 
   if (event.type === "message") {
     console.log("MESSAGE - ", event);
@@ -18,9 +21,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
     reply(events);
     await insertReply(events);
 
-    // メッセージの受信をクライアントサイドに通知（ioは中でrequireする必要あり）
-    const io = require("../../server.js");
-    const event = events[0];
     io.emit("refetch", { event });
   } else if (event.type === "follow") {
     console.log("FOLLOW - ", event);
