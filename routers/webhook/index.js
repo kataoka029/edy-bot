@@ -17,20 +17,16 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   console.log("EVENT - ", event);
 
   if (event.type === "message") {
-    // DBへの追加、リプライ
     await insertUserMessage(events);
     reply(events);
     await insertReplyMessage(events);
-
-    // ioはifの中で
-    const io = require("../../server.js");
-    io.emit("refetch", { event });
   } else if (event.type === "follow") {
     await insertUser(events);
-    // ioはifの中で
-    const io = require("../../server.js");
-    io.emit("refetch", { event });
   }
+
+  // ioはwebhookRouter.post()の中で
+  const io = require("../../server.js");
+  io.emit("refetch", { event });
 });
 
 module.exports = webhookRouter;
