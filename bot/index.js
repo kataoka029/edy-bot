@@ -43,7 +43,7 @@ const storeImage = async (events) => {
   const uploadStream = dropbox(
     {
       resource: "files/upload",
-      parameters: { path: "/edy-images" },
+      parameters: { path: `/edy-images/${event.message.id}_${timestamp}.jpg` },
     },
     (err, result, response) => {
       console.log("UPLOADED ON DROPBOX??");
