@@ -12,11 +12,11 @@ const createReplyObject = (events) => {
 const reply = async (events) => {
   const event = events[0];
   console.log("CONFIG - ", config);
-  if (event.message.type === "image") {
-    fetch(`https://api.line.me/v2/bot/message/${event.message.id}/content`, {
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    }).then((res) => console.log("RES - ", res));
-  }
+  // if (event.message.type === "image") {
+  //   fetch(`https://api.line.me/v2/bot/message/${event.message.id}/content`, {
+  //     Authorization: `Bearer ${config.channelAccessToken}`,
+  //   }).then((res) => console.log("RES - ", res));
+  // }
 
   const replyObject = createReplyObject(events);
   client
