@@ -1,6 +1,7 @@
 const { client, url } = require("../config");
 const fs = require("fs");
 const fetch = require("node-fetch");
+const mkdirp = require("mkdirp");
 
 const createReplyObject = (events) => {
   const text = events[0].message.text;
@@ -13,7 +14,6 @@ const createReplyObject = (events) => {
 const reply = async (events) => {
   const event = events[0];
   const replyObject = createReplyObject(events);
-
   client
     .replyMessage(event.replyToken, [replyObject])
     .then(() => console.log("SUCCESS - reply()"))
@@ -35,8 +35,9 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
+  mkdirp(`../img/${userId}`);
   const dest = fs.createWriteStream(
-    `./img/${userId}/${timestamp}.jpg`,
+    `../img/${userId}/${timestamp}.jpg`,
     "binary"
   );
 
