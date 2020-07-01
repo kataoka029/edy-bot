@@ -43,26 +43,27 @@ const storeImage = async (events) => {
   const uploadStream = dropbox(
     {
       resource: "files/upload",
-      parameters: { path: `/edy-images/${event.message.id}_${timestamp}.jpg` },
+      parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
     },
     (err, result, response) => {
       console.log("UPLOADED ON DROPBOX??");
     }
   );
 
-  client.getMessageContent(event.message.id).then((stream) => {
-    stream.pipe(uploadStream);
-  });
+  // client.getMessageContent(event.message.id).then((stream) => {
+  //   stream.pipe(uploadStream);
+  // });
 
-  // const dir = fetch(
-  //   `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
-  //   {
-  //     headers: {
-  //       "Content-type": "application/json",
-  //       Authorization: `Bearer ${config.channelAccessToken}`,
-  //     },
-  //   }
-  // );
+  const image = await fetch(
+    `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
+    {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${config.channelAccessToken}`,
+      },
+    }
+  );
+  fs.createReadStream(image).pipe(uploadStream);
 };
 
 module.exports = { createReplyObject, reply, storeImage };
