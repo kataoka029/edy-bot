@@ -28,7 +28,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           break;
         case "image":
           storeImage(events);
-          console.log("image might be stored.");
           io.emit("refetch", { event });
           break;
         default:

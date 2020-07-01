@@ -35,7 +35,10 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  const dest = fs.createWriteStream(`./img/${userId}/${timestamp}.jpg`);
+  const dest = fs.createWriteStream(
+    `./img/${userId}/${timestamp}.jpg`,
+    "binary"
+  );
 
   client.getMessageContent(event.message.id).then((stream) => {
     stream.pipe(dest);
