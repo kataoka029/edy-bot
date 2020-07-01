@@ -23,10 +23,16 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           await insertUserMessage(events);
           reply(events);
           await insertReplyMessage(events);
+          // ioはwebhookRouter.post()の中で？
+          const io = require("../../server.js");
+          io.emit("refetch", { event });
           break;
         case "image":
           storeImage(events);
           console.log("image might be stored.");
+          // ioはwebhookRouter.post()の中で？
+          const io = require("../../server.js");
+          io.emit("refetch", { event });
           break;
         default:
           console.log("other message type dayo.");
@@ -34,14 +40,13 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
       break;
     case "follow":
       await insertUser(events);
+      // ioはwebhookRouter.post()の中で？
+      const io = require("../../server.js");
+      io.emit("refetch", { event });
       break;
     default:
       console.log("other type dayo.");
   }
-
-  // ioはwebhookRouter.post()の中で？
-  const io = require("../../server.js");
-  io.emit("refetch", { event });
 
   res.status(200).send();
 });

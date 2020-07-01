@@ -22,8 +22,9 @@ const reply = async (events) => {
 
 const storeImage = async (events) => {
   const event = events[0];
-  const users = await fetch(`${url}api/users/${event.source.userId}`);
-  console.log("HERE", users, url, event);
+  const res = await fetch(`${url}api/users/${event.source.userId}`);
+  const users = await res.json();
+  console.log("HERE");
   const userId = users[0].id;
   const date = new Date();
   const timestamp =
