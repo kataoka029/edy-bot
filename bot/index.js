@@ -36,12 +36,10 @@ const storeImage = async (events) => {
 
   const dest = fs.createWriteStream(`${userId}_${timestamp}.jpg`, "binary");
 
-  client
-    .getMessageContent(event.message.id)
-    .then((stream) => {
-      stream.pipe(dest);
-    })
-    .then(() => console.log("DEST - ", dest, "STREAM - ", stream));
+  client.getMessageContent(event.message.id).then((stream) => {
+    stream.pipe(dest);
+    console.log("DEST - ", dest, "STREAM - ", stream);
+  });
 };
 
 module.exports = { createReplyObject, reply, storeImage };
