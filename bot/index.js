@@ -58,12 +58,11 @@ const storeImage = async (events) => {
     `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
     {
       headers: {
-        "Content-type": "application/json",
         Authorization: `Bearer ${config.channelAccessToken}`,
       },
     }
   );
-  fs.createReadStream(image).pipe(uploadStream);
+  fs.createReadStream(new Buffer(image)).pipe(uploadStream);
 };
 
 module.exports = { createReplyObject, reply, storeImage };
