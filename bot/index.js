@@ -1,6 +1,5 @@
-const { client } = require("../config");
+const { config, client } = require("../config");
 const fetch = require("node-fetch");
-const { channelAccessToken } = require("../config");
 
 const createReplyObject = (events) => {
   const text = events[0].message.text;
@@ -14,7 +13,7 @@ const reply = async (events) => {
   const event = events[0];
   if (event.message.type === "image") {
     fetch(`https://api.line.me/v2/bot/message/${event.message.id}/content`, {
-      Authorization: `Bearer ${channelAccessToken}`,
+      Authorization: `Bearer ${config.channelAccessToken}`,
     }).then((res) => console.log("RES - ", res));
   }
 
