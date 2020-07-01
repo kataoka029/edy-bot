@@ -37,8 +37,9 @@ const storeImage = async (events) => {
   const dest = fs.createWriteStream(`${userId}_${timestamp}.jpg`, "binary");
 
   client.getMessageContent(event.message.id).then((stream) => {
-    stream.pipe(dest);
-    console.log("DEST - ", dest, "STREAM - ", stream);
+    // stream.pipe(dest);
+    stream.on("data", (chunk) => dest.write(chunk));
+    stream.on("error", (err) => console.log("ERROR - ", err));
   });
 };
 
