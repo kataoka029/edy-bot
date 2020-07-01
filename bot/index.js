@@ -1,6 +1,7 @@
-const { client, url } = require("../config");
+const { config, client, url, dropboxAccessToken } = require("../config");
 const fs = require("fs");
 const fetch = require("node-fetch");
+const dropboxV2Api = require("dropbox-v2-api");
 
 const createReplyObject = (events) => {
   const text = events[0].message.text;
@@ -19,6 +20,10 @@ const reply = async (events) => {
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
+const dropbox = dropboxV2Api.authenticate({
+  token: dropboxAccessToken,
+});
+
 const storeImage = async (events) => {
   const event = events[0];
   const res = await fetch(`${url}api/users/${event.source.userId}`);
@@ -34,13 +39,30 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  const dest = fs.createWriteStream(`${userId}_${timestamp}.jpg`, "binary");
+  // DropboxやGoogle Driveにアップならこっちでも？
+  const uploadStream = dropbox(
+    {
+      resource: "files/upload",
+      parameters: { path: "/edy-images" },
+    },
+    (err, result, response) => {
+      console.log("UPLOADED ON DROPBOX??");
+    }
+  );
 
   client.getMessageContent(event.message.id).then((stream) => {
-    // stream.pipe(dest);
-    stream.on("data", (chunk) => dest.write(chunk));
-    stream.on("error", (err) => console.log("ERROR - ", err));
+    stream.pipe(uploadStream);
   });
+
+  // const dir = fetch(
+  //   `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
+  //   {
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       Authorization: `Bearer ${config.channelAccessToken}`,
+  //     },
+  //   }
+  // );
 };
 
 module.exports = { createReplyObject, reply, storeImage };

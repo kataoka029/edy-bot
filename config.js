@@ -16,4 +16,6 @@ const url =
     ? "https://edy-bot.herokuapp.com/"
     : "http://localhost:4000/";
 
-module.exports = { client, lineMiddleware, url };
+const dropboxAccessToken = process.env.DROPBOX_ACCESS_TOKEN;
+
+module.exports = { config, client, lineMiddleware, url, dropboxAccessToken };

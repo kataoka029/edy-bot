@@ -17,6 +17,7 @@
     "@line/bot-sdk": "^6.8.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "dropbox-v2-api": "^2.4.19",
     "express": "^4.17.1",
     "http": "^0.0.1-security",
     "jest": "^26.0.1",
