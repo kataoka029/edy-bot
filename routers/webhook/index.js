@@ -12,6 +12,7 @@ const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const events = req.body.events;
   const event = events[0];
+  // webhookRouter.post()の中でないといけない
   const io = require("../../server.js");
 
   console.log("EVENT - ", event);

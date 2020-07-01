@@ -24,7 +24,6 @@ const storeImage = async (events) => {
   const event = events[0];
   const res = await fetch(`${url}api/users/${event.source.userId}`);
   const users = await res.json();
-  console.log("HERE");
   const userId = users[0].id;
   const date = new Date();
   const timestamp =
@@ -36,7 +35,7 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  const dest = fs.createWriteStream(`../img/${userId}/${timestamp}.jpg`);
+  const dest = fs.createWriteStream(`./img/${userId}/${timestamp}.jpg`);
 
   client.getMessageContent(event.message.id).then((stream) => {
     stream.pipe(dest);
