@@ -35,7 +35,7 @@ const storeImage = async (events) => {
     ("00" + date.getMilliseconds()).slice(-3);
 
   const dest = fs.createWriteStream(
-    `../img/${userId}_${timestamp}.jpg`,
+    __dirname + `/../img/${userId}_${timestamp}.jpg`,
     "binary"
   );
 
