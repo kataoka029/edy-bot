@@ -39,9 +39,11 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
       console.log("other type dayo.");
   }
 
-  // ioはwebhookRouter.post()の中で
+  // ioはwebhookRouter.post()の中で？
   const io = require("../../server.js");
   io.emit("refetch", { event });
+
+  res.status(200).send();
 });
 
 module.exports = webhookRouter;

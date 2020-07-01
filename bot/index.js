@@ -22,7 +22,8 @@ const reply = async (events) => {
 
 const storeImage = async (events) => {
   const event = events[0];
-  const user = await fetch(`${url}api/users/${event.source.userId}`);
+  const users = await fetch(`${url}api/users/${event.source.userId}`);
+  const userId = users[0].id;
   const date = new Date();
   const timestamp =
     date.getFullYear() +
@@ -33,7 +34,7 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  const dest = fs.createWriteStream(`../img/${user.id}/${timestamp}.jpg`);
+  const dest = fs.createWriteStream(`../img/${userId}/${timestamp}.jpg`);
 
   client.getMessageContent(event.message.id).then((stream) => {
     stream.pipe(dest);
