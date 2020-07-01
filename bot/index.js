@@ -1,5 +1,6 @@
 const { client, url } = require("../config");
 const fs = require("fs");
+const path = require("path");
 const fetch = require("node-fetch");
 
 const createReplyObject = (events) => {
@@ -35,7 +36,7 @@ const storeImage = async (events) => {
     ("00" + date.getMilliseconds()).slice(-3);
 
   const dest = fs.createWriteStream(
-    __dirname + `/../img/${userId}_${timestamp}.jpg`,
+    path.resolve(__dirname, "../img", `${userId}_${timestamp}.jpg`),
     "binary"
   );
 
