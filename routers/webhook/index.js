@@ -6,7 +6,7 @@ const {
   insertReplyMessage,
   insertUser,
 } = require("../../db");
-const { reply } = require("../../bot");
+const { reply, storeImage } = require("../../bot");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
@@ -16,12 +16,27 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   // const event = events[0];
   console.log("EVENT - ", event);
 
-  if (event.type === "message") {
-    await insertUserMessage(events);
-    reply(events);
-    await insertReplyMessage(events);
-  } else if (event.type === "follow") {
-    await insertUser(events);
+  switch (event.type) {
+    case "message":
+      switch (event.message.type) {
+        case "text":
+          await insertUserMessage(events);
+          reply(events);
+          await insertReplyMessage(events);
+          break;
+        case "image":
+          storeImage(events);
+          console.log("image might be stored.");
+          break;
+        default:
+          console.log("other message type dayo.");
+      }
+      break;
+    case "follow":
+      await insertUser(events);
+      break;
+    default:
+      console.log("other type dayo.");
   }
 
   // ioはwebhookRouter.post()の中で

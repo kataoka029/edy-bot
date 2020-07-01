@@ -61,4 +61,14 @@ usersRouter.post("/", (req, res) => {
     });
 });
 
+usersRouter.get("/:lineUserId", (req, res) => {
+  const lineUserId = req.params.lineUserId;
+  return knex("users")
+    .where({ line_user_id: lineUserId })
+    .select()
+    .then((user) => res.send(user))
+    .then(() => console.log("SUCCESS - GET /users/:lineUserId"))
+    .catch((err) => console.log("ERROR - GET /users/:lineUserId - ", err));
+});
+
 module.exports = usersRouter;

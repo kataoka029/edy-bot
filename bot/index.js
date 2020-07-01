@@ -1,4 +1,5 @@
-const { config, client } = require("../config");
+const { client, url } = require("../config");
+const fs = require("fs");
 const fetch = require("node-fetch");
 
 const createReplyObject = (events) => {
@@ -11,18 +12,32 @@ const createReplyObject = (events) => {
 
 const reply = async (events) => {
   const event = events[0];
-  // console.log("CONFIG - ", config);
-  if (event.message.type === "image") {
-    fetch(`https://api.line.me/v2/bot/message/${event.message.id}/content`, {
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    }).then((res) => console.log("RES - ", res));
-  }
-
   const replyObject = createReplyObject(events);
+
   client
     .replyMessage(event.replyToken, [replyObject])
     .then(() => console.log("SUCCESS - reply()"))
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
-module.exports = { createReplyObject, reply };
+const storeImage = async (events) => {
+  const event = events[0];
+  const user = await fetch(`${url}api/users/${event.source.userId}`);
+  const date = new Date();
+  const timestamp =
+    date.getFullYear() +
+    ("0" + (date.getMonth() + 1)).slice(-2) +
+    ("0" + date.getDate()).slice(-2) +
+    ("0" + date.getHours()).slice(-2) +
+    ("0" + date.getMinutes()).slice(-2) +
+    ("0" + date.getSeconds()).slice(-2) +
+    ("00" + date.getMilliseconds()).slice(-3);
+
+  const dest = fs.createWriteStream(`../img/${user.id}/${timestamp}.jpg`);
+
+  client.getMessageContent(event.message.id).then((stream) => {
+    stream.pipe(dest);
+  });
+};
+
+module.exports = { createReplyObject, reply, storeImage };
