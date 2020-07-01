@@ -16,4 +16,4 @@ const url =
     ? "https://edy-bot.herokuapp.com/"
     : "http://localhost:4000/";
 
-module.exports = { client, lineMiddleware, url };
+module.exports = { config, client, lineMiddleware, url };
