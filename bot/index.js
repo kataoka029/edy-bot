@@ -40,13 +40,10 @@ const storeImage = async (events) => {
   //   path.resolve(__dirname, "../img", `${userId}_${timestamp}.jpg`),
   //   "binary"
   // );
-  const dest = fs.createWriteStream(
-    `/Users/Shun/Coding/edy-bot/img/${userId}_${timestamp}.jpg`,
-    "binary"
-  );
+  const dest = fs.createWriteStream(`../${userId}_${timestamp}.jpg`, "binary");
 
   client.getMessageContent(event.message.id).then((stream) => {
-    stream.pipe(dest);
+    stream.pipe(dest).catch((err) => console.log(err));
   });
 };
 
