@@ -35,7 +35,10 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  mkdirp(`../img/${userId}`);
+  mkdirp(`../img/${userId}`)
+    .then(() => console.log("SUCCESS"))
+    .catch((err) => console.log("ERROR - ", err));
+
   const dest = fs.createWriteStream(
     `../img/${userId}/${timestamp}.jpg`,
     "binary"
