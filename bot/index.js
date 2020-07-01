@@ -11,6 +11,7 @@ const createReplyObject = (events) => {
 
 const reply = async (events) => {
   const event = events[0];
+  console.log("CONFIG - ", config);
   if (event.message.type === "image") {
     fetch(`https://api.line.me/v2/bot/message/${event.message.id}/content`, {
       Authorization: `Bearer ${config.channelAccessToken}`,
