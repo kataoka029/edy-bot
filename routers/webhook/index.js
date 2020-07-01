@@ -8,12 +8,11 @@ const {
 } = require("../../db");
 const { reply, storeImage } = require("../../bot");
 
-const io = require("../../server.js");
-
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const events = req.body.events;
   const event = events[0];
+  const io = require("../../server.js");
 
   console.log("EVENT - ", event);
 
