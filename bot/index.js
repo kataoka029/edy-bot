@@ -1,6 +1,5 @@
 const { client, url } = require("../config");
 const fs = require("fs");
-// const path = require("path");
 const fetch = require("node-fetch");
 
 const createReplyObject = (events) => {
@@ -35,15 +34,16 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  // pathの指定がうまくいかないのでとりあえず絶対パスでローカルフォルダを指定
-  // const dest = fs.createWriteStream(
-  //   path.resolve(__dirname, "../img", `${userId}_${timestamp}.jpg`),
-  //   "binary"
-  // );
-  const dest = fs.createWriteStream(`../${userId}_${timestamp}.jpg`, "binary");
+  // const dest = fs.createWriteStream(`../${userId}_${timestamp}.jpg`, "binary");
 
   client.getMessageContent(event.message.id).then((stream) => {
-    stream.pipe(dest).catch((err) => console.log(err));
+    // stream.pipe(dest).catch((err) => console.log(err));
+    stream.on("data", (chunk) => {
+      console.log("CHUNK - ", chunk);
+    });
+    stream.on("error", (err) => {
+      console.log(err);
+    });
   });
 };
 
