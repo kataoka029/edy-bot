@@ -80,7 +80,7 @@ const storeImage = async (events) => {
     res.body.pipe(
       dropbox({
         resource: "files/upload",
-        parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
+        parameters: { path: `/edy-images/${userId}/${timestamp}.jpg` },
       })
     );
   });
