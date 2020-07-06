@@ -25,18 +25,18 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
         case "text":
           reply(events);
           await insertReplyMessage(events);
-          io.emit("refetch", { event });
+          // io.emit("refetch", { event });
           break;
         case "image":
           await storeImages(events);
-          io.emit("refetch", { event });
+          // io.emit("refetch", { event });
           break;
         case "sticker":
-          io.emit("refetch", { event });
           break;
         default:
           console.log("other message type dayo.");
       }
+      io.emit("refetch", { event });
       break;
     case "follow":
       await insertUser(events);
