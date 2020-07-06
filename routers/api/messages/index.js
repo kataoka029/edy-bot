@@ -22,22 +22,24 @@ messagesRouter.get("/:lineUserId", (req, res) => {
 });
 
 messagesRouter.post("/", (req, res) => {
-  const event = req.body[0];
-  const message = {
-    line_type: event.type,
-    line_reply_token: event.replyToken,
-    line_user_id: event.source.userId,
-    line_user_type: event.source.type,
-    line_message_id: event.message.id,
-    line_message_type: event.message.type,
-    line_message_text: event.message.text || "_",
-    unread: 1,
-  };
-  return knex("messages")
-    .insert(message)
-    .then(() => res.status(201).send())
-    .then(() => "SUCCESS - POST /messages")
-    .catch((err) => console.log("ERROR - POST /messages - ", err));
+  const events = req.body;
+  for (const event of events) {
+    const message = {
+      line_type: event.type,
+      line_reply_token: event.replyToken,
+      line_user_id: event.source.userId,
+      line_user_type: event.source.type,
+      line_message_id: event.message.id,
+      line_message_type: event.message.type,
+      line_message_text: event.message.text || "_",
+      unread: 1,
+    };
+    knex("messages")
+      .insert(message)
+      .then(() => res.status(201).send())
+      .then(() => "SUCCESS - POST /messages")
+      .catch((err) => console.log("ERROR - POST /messages - ", err));
+  }
 });
 
 messagesRouter.post("/:lineUserId", (req, res) => {
