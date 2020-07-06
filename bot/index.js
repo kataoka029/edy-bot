@@ -54,9 +54,19 @@ const storeImage = async (events) => {
     }
   );
 
-  client
-    .getMessageContent(event.message.id)
-    .then((downloadStream) => downloadStream.pipe(uploadStream));
+  // client
+  //   .getMessageContent(event.message.id)
+  //   .then((downloadStream) => downloadStream.pipe(uploadStream));
+  client.getMessageContent(event.message.id).then(
+    (stream) =>
+      new Promise((resolve, reject) => {
+        stream.pipe(uploadStrea);
+        stream.on("end", () =>
+          resolve(`/edy-images/${userId}_${timestamp}.jpg`)
+        );
+        stream.on("error", reject);
+      })
+  );
 
   // downloadStream.pipe(uploadStream);
 
