@@ -39,39 +39,7 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  // const downloadStream = dropbox({
-  //   resource: "files/download",
-  //   parameters: { path: "/edy-images/sample.jpg" },
-  // });
-
-  // const uploadStream = dropbox(
-  //   {
-  //     resource: "files/upload",
-  //     parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
-  //   }
-  // (err, result, response) => {
-  //   console.log("UPLOADED ON DROPBOX??");
-  // }
-  // );
-
-  // client.getMessageContent(event.message.id).then((downloadStream) => {
-  //   downloadStream.pipe(uploadStream);
-  // });
-
-  // client.getMessageContent(event.message.id).then(
-  //   (stream) =>
-  //     new Promise((resolve, reject) => {
-  //       stream.pipe(uploadStrea);
-  //       stream.on("end", () =>
-  //         resolve(`/edy-images/${userId}_${timestamp}.jpg`)
-  //       );
-  //       stream.on("error", reject);
-  //     })
-  // );
-
-  // 既存の画像に対しては成功
-  // downloadStream.pipe(uploadStream);
-
+  // dropbox()は外出し不可
   fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
     headers: {
       Authorization: `Bearer ${config.channelAccessToken}`,
@@ -84,8 +52,6 @@ const storeImage = async (events) => {
       })
     );
   });
-  // const image = await imageRes.blob();
-  // fs.createReadStream(image).pipe(uploadStream);
 };
 
 module.exports = { createReplyObject, reply, storeImage };
