@@ -28,7 +28,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           io.emit("refetch", { event });
           break;
         case "image":
-          storeImages(events);
+          await storeImages(events);
           io.emit("refetch", { event });
           break;
         case "sticker":
