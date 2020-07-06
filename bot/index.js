@@ -55,8 +55,9 @@ const storeImage = async (events) => {
   );
 
   client.getMessageContent(event.message.id).then((downloadStream) => {
-    console.log(downloadStream);
-    downloadStream.pipe(uploadStream);
+    // console.log(downloadStream);
+    downloadStream.on("data", (chunk) => uploadStream.write(chunk));
+    downloadStream.on("error", (err) => console.log(err));
   });
 
   // client.getMessageContent(event.message.id).then(
