@@ -39,10 +39,10 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  const downloadStream = dropbox({
-    resource: "files/download",
-    parameters: { path: "/edy-images/sample.jpg" },
-  });
+  // const downloadStream = dropbox({
+  //   resource: "files/download",
+  //   parameters: { path: "/edy-images/sample.jpg" },
+  // });
 
   const uploadStream = dropbox(
     {
@@ -54,7 +54,11 @@ const storeImage = async (events) => {
     }
   );
 
-  downloadStream.pipe(uploadStream);
+  client
+    .getMessageContent(event.message.id)
+    .then((downloadStream) => downloadStream.pipe(uploadStream));
+
+  // downloadStream.pipe(uploadStream);
 
   // const imageRes = await fetch(
   // fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
