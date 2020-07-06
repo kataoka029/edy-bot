@@ -25,35 +25,39 @@ const dropbox = dropboxV2Api.authenticate({
 });
 
 const storeImage = async (events) => {
-  const event = events[0];
+  for (const event of events) {
+    const res = await fetch(`${url}api/users/${event.source.userId}`);
+    const users = await res.json();
+    const userId = users[0].id;
 
-  const res = await fetch(`${url}api/users/${event.source.userId}`);
-  const users = await res.json();
-  const userId = users[0].id;
+    const date = new Date();
+    const timestamp =
+      date.getFullYear() +
+      ("0" + (date.getMonth() + 1)).slice(-2) +
+      ("0" + date.getDate()).slice(-2) +
+      ("0" + date.getHours()).slice(-2) +
+      ("0" + date.getMinutes()).slice(-2) +
+      ("0" + date.getSeconds()).slice(-2) +
+      ("00" + date.getMilliseconds()).slice(-3);
 
-  const date = new Date();
-  const timestamp =
-    date.getFullYear() +
-    ("0" + (date.getMonth() + 1)).slice(-2) +
-    ("0" + date.getDate()).slice(-2) +
-    ("0" + date.getHours()).slice(-2) +
-    ("0" + date.getMinutes()).slice(-2) +
-    ("0" + date.getSeconds()).slice(-2) +
-    ("00" + date.getMilliseconds()).slice(-3);
-
-  // dropbox()は外出し不可
-  fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
-    headers: {
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    },
-  }).then((res) => {
-    res.body.pipe(
-      dropbox({
-        resource: "files/upload",
-        parameters: { path: `/edy-images/${userId}/${timestamp}.jpg` },
-      })
-    );
-  });
+    // dropbox()は外出し不可
+    fetch(
+      `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
+      {
+        headers: {
+          Authorization: `Bearer ${config.channelAccessToken}`,
+        },
+      }
+    ).then((res) => {
+      res.body.pipe(
+        dropbox({
+          resource: "files/upload",
+          parameters: { path: `/edy-images/${userId}/${timestamp}.jpg` },
+        })
+      );
+    });
+  }
+  // const event = events[0];
 };
 
 module.exports = { createReplyObject, reply, storeImage };
