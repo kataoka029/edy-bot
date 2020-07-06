@@ -3,7 +3,7 @@ const { url } = require("../config");
 const { createReplyObject } = require("../bot");
 const _ = require("lodash");
 
-const insertUserMessage = async (events) => {
+const insertUserMessages = async (events) => {
   await fetch(`${url}api/messages`, {
     method: "POST",
     headers: {
@@ -11,8 +11,8 @@ const insertUserMessage = async (events) => {
     },
     body: JSON.stringify(events),
   })
-    .then(() => console.log("SUCCESS - insertUserMessage()"))
-    .catch((err) => console.log("ERROR - insertUserMessage() - ", err));
+    .then(() => console.log("SUCCESS - insertUserMessages()"))
+    .catch((err) => console.log("ERROR - insertUserMessages() - ", err));
 };
 
 const insertReplyMessage = async (events) => {
@@ -46,4 +46,4 @@ const insertUser = async (events) => {
     .catch((err) => console.log("ERROR - insertUser() - ", err));
 };
 
-module.exports = { insertUserMessage, insertReplyMessage, insertUser };
+module.exports = { insertUserMessages, insertReplyMessage, insertUser };

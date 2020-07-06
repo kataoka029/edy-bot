@@ -24,12 +24,12 @@ const dropbox = dropboxV2Api.authenticate({
   token: dropboxAccessToken,
 });
 
-const storeImage = async (events) => {
-  for (const event of events) {
-    const res = await fetch(`${url}api/users/${event.source.userId}`);
-    const users = await res.json();
-    const userId = users[0].id;
+const storeImages = async (events) => {
+  const res = await fetch(`${url}api/users/${events[0].source.userId}`);
+  const users = await res.json();
+  const userId = users[0].id;
 
+  for (const event of events) {
     const date = new Date();
     const timestamp =
       date.getFullYear() +
@@ -57,7 +57,6 @@ const storeImage = async (events) => {
       );
     });
   }
-  // const event = events[0];
 };
 
-module.exports = { createReplyObject, reply, storeImage };
+module.exports = { createReplyObject, reply, storeImages };

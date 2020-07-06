@@ -2,17 +2,16 @@ const express = require("express");
 // const bot = require("../../bot.js");
 const { lineMiddleware } = require("../../config");
 const {
-  insertUserMessage,
+  insertUserMessages,
   insertReplyMessage,
   insertUser,
 } = require("../../db");
-const { reply, storeImage } = require("../../bot");
+const { reply, storeImages } = require("../../bot");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
   const events = req.body.events;
   const event = events[0];
-  // webhookRouter.post()の中でないといけない
   const io = require("../../server.js");
 
   events.forEach((event, i) => {
@@ -21,7 +20,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
 
   switch (event.type) {
     case "message":
-      await insertUserMessage(events);
+      await insertUserMessages(events);
       switch (event.message.type) {
         case "text":
           reply(events);
@@ -29,7 +28,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           io.emit("refetch", { event });
           break;
         case "image":
-          storeImage(events);
+          storeImages(events);
           io.emit("refetch", { event });
           break;
         case "sticker":
