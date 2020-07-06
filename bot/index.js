@@ -59,7 +59,7 @@ const storeImage = async (events) => {
     headers: {
       Authorization: `Bearer ${config.channelAccessToken}`,
     },
-  }).then((res) => fs.createReadStream(res.body).pipe(uploadStream));
+  }).then((res) => res.body.pipe(uploadStream));
   // const image = await imageRes.blob();
   // fs.createReadStream(image).pipe(uploadStream);
 };
