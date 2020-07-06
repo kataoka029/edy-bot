@@ -39,7 +39,11 @@ const storeImage = async (events) => {
     ("0" + date.getSeconds()).slice(-2) +
     ("00" + date.getMilliseconds()).slice(-3);
 
-  // DropboxやGoogle Driveにアップならこっちでも？
+  const downloadStream = dropbox({
+    resource: "files/download",
+    parameters: { path: "/edy-images/sample.jpg" },
+  });
+
   const uploadStream = dropbox(
     {
       resource: "files/upload",
@@ -50,16 +54,14 @@ const storeImage = async (events) => {
     }
   );
 
-  // client.getMessageContent(event.message.id).then((stream) => {
-  //   stream.pipe(uploadStream);
-  // });
+  downloadStream.pipe(uploadStream);
 
   // const imageRes = await fetch(
-  fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
-    headers: {
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    },
-  }).then((res) => res.body.pipe(uploadStream));
+  // fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
+  //   headers: {
+  //     Authorization: `Bearer ${config.channelAccessToken}`,
+  //   },
+  // }).then((res) => fs.createReadStream(res.body).pipe(uploadStream));
   // const image = await imageRes.blob();
   // fs.createReadStream(image).pipe(uploadStream);
 };
