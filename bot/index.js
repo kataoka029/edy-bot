@@ -54,7 +54,7 @@ const storeImage = async (events) => {
   //   stream.pipe(uploadStream);
   // });
 
-  const image = await fetch(
+  const res = await fetch(
     `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
     {
       headers: {
@@ -62,7 +62,8 @@ const storeImage = async (events) => {
       },
     }
   );
-  fs.createReadStream(new Buffer(image)).pipe(uploadStream);
+  const image = res.blob();
+  fs.createReadStream(image).pipe(uploadStream);
 };
 
 module.exports = { createReplyObject, reply, storeImage };
