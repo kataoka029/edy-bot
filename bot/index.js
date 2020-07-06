@@ -77,7 +77,7 @@ const storeImage = async (events) => {
     },
   }).then((res) => {
     console.log("res: ", res, "res.body: ", res.body);
-    fs.createReadStream(res.body).pipe(uploadStream);
+    res.body.pipe(uploadStream);
   });
   // const image = await imageRes.blob();
   // fs.createReadStream(image).pipe(uploadStream);
