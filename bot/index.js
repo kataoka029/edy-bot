@@ -62,7 +62,7 @@ const storeImage = async (events) => {
       },
     }
   );
-  const image = res.blob();
+  const image = await res.blob();
   fs.createReadStream(image).pipe(uploadStream);
 };
 
