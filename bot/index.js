@@ -41,7 +41,7 @@ const storeImages = async (events) => {
       ("00" + date.getMilliseconds()).slice(-3);
 
     // dropbox()は外出し不可
-    fetch(
+    await fetch(
       `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
       {
         headers: {
