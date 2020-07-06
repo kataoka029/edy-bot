@@ -54,11 +54,9 @@ const storeImage = async (events) => {
     // }
   );
 
-  client.getMessageContent(event.message.id).then((downloadStream) => {
-    // console.log(downloadStream);
-    downloadStream.on("data", (chunk) => uploadStream.write(chunk));
-    downloadStream.on("error", (err) => console.log(err));
-  });
+  // client.getMessageContent(event.message.id).then((downloadStream) => {
+  //   downloadStream.pipe(uploadStream);
+  // });
 
   // client.getMessageContent(event.message.id).then(
   //   (stream) =>
@@ -74,14 +72,14 @@ const storeImage = async (events) => {
   // 既存の画像に対しては成功
   // downloadStream.pipe(uploadStream);
 
-  // fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
-  //   headers: {
-  //     Authorization: `Bearer ${config.channelAccessToken}`,
-  //   },
-  // }).then((res) => {
-  //   console.log("res: ", res, "res.body: ", res.body);
-  //   res.body.pipe(uploadStream);
-  // });
+  fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
+    headers: {
+      Authorization: `Bearer ${config.channelAccessToken}`,
+    },
+    encoding: null,
+  }).then((res) => {
+    res.body.pipe(uploadStream);
+  });
   // const image = await imageRes.blob();
   // fs.createReadStream(image).pipe(uploadStream);
 };
