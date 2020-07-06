@@ -44,15 +44,15 @@ const storeImage = async (events) => {
   //   parameters: { path: "/edy-images/sample.jpg" },
   // });
 
-  const uploadStream = dropbox(
-    {
-      resource: "files/upload",
-      parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
-    }
-    // (err, result, response) => {
-    //   console.log("UPLOADED ON DROPBOX??");
-    // }
-  );
+  // const uploadStream = dropbox(
+  //   {
+  //     resource: "files/upload",
+  //     parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
+  //   }
+  // (err, result, response) => {
+  //   console.log("UPLOADED ON DROPBOX??");
+  // }
+  // );
 
   // client.getMessageContent(event.message.id).then((downloadStream) => {
   //   downloadStream.pipe(uploadStream);
@@ -76,9 +76,13 @@ const storeImage = async (events) => {
     headers: {
       Authorization: `Bearer ${config.channelAccessToken}`,
     },
-    encoding: null,
   }).then((res) => {
-    res.body.pipe(uploadStream);
+    res.body.pipe(
+      dropbox({
+        resource: "files/upload",
+        parameters: { path: `/edy-images/${userId}_${timestamp}.jpg` },
+      })
+    );
   });
   // const image = await imageRes.blob();
   // fs.createReadStream(image).pipe(uploadStream);
