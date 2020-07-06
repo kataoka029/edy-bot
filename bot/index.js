@@ -54,16 +54,14 @@ const storeImage = async (events) => {
   //   stream.pipe(uploadStream);
   // });
 
-  const imageRes = await fetch(
-    `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
-    {
-      headers: {
-        Authorization: `Bearer ${config.channelAccessToken}`,
-      },
-    }
-  );
-  const image = await imageRes.blob();
-  fs.createReadStream(image).pipe(uploadStream);
+  // const imageRes = await fetch(
+  fetch(`https://api-data.line.me/v2/bot/message/${event.message.id}/content`, {
+    headers: {
+      Authorization: `Bearer ${config.channelAccessToken}`,
+    },
+  }).then((res) => fs.createReadStream(res.body).pipe(uploadStream));
+  // const image = await imageRes.blob();
+  // fs.createReadStream(image).pipe(uploadStream);
 };
 
 module.exports = { createReplyObject, reply, storeImage };
