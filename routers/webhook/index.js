@@ -19,15 +19,18 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
 
   switch (event.type) {
     case "message":
+      await insertUserMessage(events);
       switch (event.message.type) {
         case "text":
-          await insertUserMessage(events);
           reply(events);
           await insertReplyMessage(events);
           io.emit("refetch", { event });
           break;
         case "image":
           storeImage(events);
+          io.emit("refetch", { event });
+          break;
+        case "sticker":
           io.emit("refetch", { event });
           break;
         default:

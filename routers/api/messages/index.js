@@ -30,7 +30,7 @@ messagesRouter.post("/", (req, res) => {
     line_user_type: event.source.type,
     line_message_id: event.message.id,
     line_message_type: event.message.type,
-    line_message_text: event.message.text,
+    line_message_text: event.message.text || "_",
     unread: 1,
   };
   return knex("messages")

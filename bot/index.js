@@ -26,9 +26,11 @@ const dropbox = dropboxV2Api.authenticate({
 
 const storeImage = async (events) => {
   const event = events[0];
+
   const res = await fetch(`${url}api/users/${event.source.userId}`);
   const users = await res.json();
   const userId = users[0].id;
+
   const date = new Date();
   const timestamp =
     date.getFullYear() +
