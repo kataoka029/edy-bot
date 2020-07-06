@@ -15,7 +15,9 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   // webhookRouter.post()の中でないといけない
   const io = require("../../server.js");
 
-  console.log("EVENT - ", event);
+  events.forEach((event, i) => {
+    console.log(`EVENT ${i + 1} - `, event);
+  });
 
   switch (event.type) {
     case "message":
