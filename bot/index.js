@@ -1,5 +1,4 @@
 const { config, client, url, dropboxAccessToken } = require("../config");
-const fs = require("fs");
 const fetch = require("node-fetch");
 const dropboxV2Api = require("dropbox-v2-api");
 

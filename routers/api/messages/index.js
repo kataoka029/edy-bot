@@ -1,8 +1,9 @@
 const express = require("express");
-const config = require("../../../knexfile.js").development;
-const knex = require("knex")(config);
+const knexConfig = require("../../../knexfile.js").development;
+const knex = require("knex")(knexConfig);
+const fetch = require("node-fetch");
 
-const { client } = require("../../../config");
+const { client, config } = require("../../../config");
 
 const messagesRouter = express.Router();
 
@@ -19,6 +20,22 @@ messagesRouter.get("/:lineUserId", (req, res) => {
     .then((messages) => res.send(messages))
     .then(() => console.log("SUCCESS - GET /messages/:lineUserId"))
     .catch((err) => console.log("ERROR - GET /messages/:lineUserId - ", err));
+});
+
+messagesRouter.get("/:messageId/image", (req, res) => {
+  const messageId = req.params.messageId;
+  return fetch(`https://api-data.line.me/v2/bot/message/${messageId}/content`, {
+    headers: {
+      Authorization: `Bearer ${config.channelAccessToken}`,
+    },
+  })
+    .then((response) => res.send(response.body._readableState.buffer.head.data))
+    .then(() => {
+      console.log("SUCCESS - GET /messages/:messageId/image");
+    })
+    .catch((err) =>
+      console.log("ERROR - GET /messages/:messageId/image - ", err)
+    );
 });
 
 messagesRouter.post("/", (req, res) => {
@@ -65,11 +82,3 @@ messagesRouter.patch("/:lineUserId/read", (req, res) => {
 });
 
 module.exports = messagesRouter;
-
-// FOLLOW -  {
-//   type: 'follow',
-//   replyToken: '3df65ce16e8b44d7919ea2e8530b20e0',
-//   source: { userId: 'Uf42bb47c877c9e5543ca4eda7661e142', type: 'user' },
-//   timestamp: 1593525899217,
-//   mode: 'active'
-// }
