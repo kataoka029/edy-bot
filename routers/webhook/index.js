@@ -1,5 +1,4 @@
 const express = require("express");
-// const bot = require("../../bot.js");
 const { lineMiddleware } = require("../../config");
 const {
   insertUserMessages,
@@ -25,16 +24,12 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
         case "text":
           reply(events);
           await insertReplyMessage(events);
-          // io.emit("refetch", { event });
           break;
         case "image":
           await storeImages(events);
-          // io.emit("refetch", { event });
           break;
         case "sticker":
           break;
-        default:
-          console.log("other message type dayo.");
       }
       io.emit("refetch", { event });
       break;

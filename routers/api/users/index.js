@@ -10,6 +10,7 @@ usersRouter.get("/", (req, res) => {
       `SELECT
       messages.line_user_id AS "lineUserId",
       users.id AS "userId",
+      messages.line_message_type AS "messageType",
       messages.line_message_text AS "userText",
       messages.created_at AS "userDate",
       sub2.count AS "unreadCount"
