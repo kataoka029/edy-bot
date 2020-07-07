@@ -57,7 +57,7 @@ const storeImages = async (events) => {
       );
     });
 
-    dropbox.filesListFolder({ path }).then((res) => console.log(res.entries));
+    console.log("DROPBOX - ", dropbox);
   }
 };
 
