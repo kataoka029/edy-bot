@@ -39,6 +39,7 @@ const storeImages = async (events) => {
       ("0" + date.getSeconds()).slice(-2) +
       ("00" + date.getMilliseconds()).slice(-3);
 
+    const path = `/edy-images/${userId}/${timestamp}.jpg`;
     // dropbox()は外出し不可
     await fetch(
       `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
@@ -51,10 +52,12 @@ const storeImages = async (events) => {
       res.body.pipe(
         dropbox({
           resource: "files/upload",
-          parameters: { path: `/edy-images/${userId}/${timestamp}.jpg` },
+          parameters: { path },
         })
       );
     });
+
+    dropbox.filesListFolder({ path }).then((res) => console.log(res.entries));
   }
 };
 

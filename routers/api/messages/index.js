@@ -1,7 +1,7 @@
 const express = require("express");
 const knexConfig = require("../../../knexfile.js").development;
 const knex = require("knex")(knexConfig);
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 
 const { client, config } = require("../../../config");
 
@@ -22,21 +22,21 @@ messagesRouter.get("/:lineUserId", (req, res) => {
     .catch((err) => console.log("ERROR - GET /messages/:lineUserId - ", err));
 });
 
-messagesRouter.get("/:messageId/image", (req, res) => {
-  const messageId = req.params.messageId;
-  return fetch(`https://api-data.line.me/v2/bot/message/${messageId}/content`, {
-    headers: {
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    },
-  })
-    .then((response) => res.send(response.body._readableState.buffer.head.data))
-    .then(() => {
-      console.log("SUCCESS - GET /messages/:messageId/image");
-    })
-    .catch((err) =>
-      console.log("ERROR - GET /messages/:messageId/image - ", err)
-    );
-});
+// messagesRouter.get("/:messageId/image", (req, res) => {
+//   const messageId = req.params.messageId;
+//   return fetch(`https://api-data.line.me/v2/bot/message/${messageId}/content`, {
+//     headers: {
+//       Authorization: `Bearer ${config.channelAccessToken}`,
+//     },
+//   })
+//     .then((response) => res.send(response.body._readableState.buffer.head.data))
+//     .then(() => {
+//       console.log("SUCCESS - GET /messages/:messageId/image");
+//     })
+//     .catch((err) =>
+//       console.log("ERROR - GET /messages/:messageId/image - ", err)
+//     );
+// });
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
