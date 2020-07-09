@@ -1,6 +1,8 @@
 const express = require("express");
 const knexConfig = require("../../../knexfile.js").development;
 const knex = require("knex")(knexConfig);
+const fetch = require("node-fetch");
+const { url, dropboxAccessToken } = require("../../../config");
 
 const messagesRouter = express.Router();
 
@@ -53,7 +55,29 @@ messagesRouter.get("/:messageId", (req, res) => {
     .catch((err) => console.log("ERROR - GET /messages/:messageId - ", err));
 });
 
-messagesRouter.get("/latest", (req, res) => {});
+messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
+  const messageId = req.params.messageId;
+  const message = await fetch(`${url}api/messages/${messageId}`);
+  const path = message.content;
+  fetch(
+    "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+    {
+      body: {
+        path,
+        settings: {
+          requested_visibility: "public",
+          audience: "public",
+          access: "viewer",
+        },
+      },
+      headers: {
+        Authorization: `Bearer ${dropboxAccessToken}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }
+  ).then((response) => console.log(`${JSON.stringify(response.body)}`));
+});
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
