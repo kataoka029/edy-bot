@@ -1,43 +1,19 @@
 const express = require("express");
 const config = require("../../../knexfile.js").development;
 const knex = require("knex")(config);
+const { client } = require("../../../config");
 
 const usersRouter = express.Router();
 
-usersRouter.get("/", (req, res) => {
-  return knex
-    .raw(
-      `SELECT
-      messages.line_user_id AS "lineUserId",
-      users.id AS "userId",
-      messages.line_message_type AS "messageType",
-      messages.content AS "content",
-      messages.created_at AS "userDate",
-      sub2.count AS "unreadCount"
-    FROM messages
-      INNER JOIN (
-        SELECT
-          line_user_id,
-          MAX(created_at) AS created_at
-        FROM messages
-        GROUP BY line_user_id
-        ) AS sub1
-          ON messages.line_user_id = sub1.line_user_id AND messages.created_at = sub1.created_at
-      LEFT JOIN(
-        SELECT
-          line_user_id,
-          count(*)
-        FROM messages
-        WHERE unread = 1
-        GROUP BY line_user_id
-        ) AS sub2
-          ON messages.line_user_id = sub2.line_user_id
-      LEFT JOIN users
-        ON messages.line_user_id = users.line_user_id
-    ORDER BY messages.created_at DESC`
-    )
-    .then((users) => res.send(users.rows))
-    .catch((err) => res.status(400).send(err.message));
+usersRouter.get("/:lineUserId/messages", (req, res) => {
+  const lineUserId = req.params.lineUserId;
+  return knex("messages")
+    .where({ line_user_id: lineUserId })
+    .orderBy("created_at")
+    .select()
+    .then((messages) => res.send(messages))
+    .then(() => console.log("SUCCESS - GET /messages/:lineUserId"))
+    .catch((err) => console.log("ERROR - GET /messages/:lineUserId - ", err));
 });
 
 usersRouter.post("/", (req, res) => {
@@ -62,14 +38,26 @@ usersRouter.post("/", (req, res) => {
     });
 });
 
-usersRouter.get("/:lineUserId", (req, res) => {
+usersRouter.post("/:lineUserId/messages", (req, res) => {
   const lineUserId = req.params.lineUserId;
-  return knex("users")
+  const message = req.body[0].message;
+  client
+    .pushMessage(lineUserId, message)
+    .then(res.status(201).send())
+    .then(() => console.log("SUCCESS - POST /messgaes/:lineUserId"))
+    .catch((err) => console.log("ERROR - POST /messgaes/:lineUserId - ", err));
+});
+
+usersRouter.patch("/:lineUserId/messages", (req, res) => {
+  const lineUserId = req.params.lineUserId;
+  return knex("messages")
     .where({ line_user_id: lineUserId })
-    .select()
-    .then((user) => res.send(user))
-    .then(() => console.log("SUCCESS - GET /users/:lineUserId"))
-    .catch((err) => console.log("ERROR - GET /users/:lineUserId - ", err));
+    .update({ unread: 0 })
+    .then(res.status(204).send())
+    .then(() => console.log("SUCCESS - PATCH /messgaes/:lineUserId/read"))
+    .catch((err) =>
+      console.log("ERROR - POST /messgaes/:lineUserId/read - ", err)
+    );
 });
 
 module.exports = usersRouter;
