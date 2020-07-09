@@ -59,7 +59,7 @@ messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
   const messageId = req.params.messageId;
   const message = await fetch(`${url}api/messages/${messageId}`);
   const path = message.content;
-  fetch(
+  return fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
     {
       body: {
@@ -76,7 +76,9 @@ messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
       },
       method: "POST",
     }
-  ).then((response) => console.log(`RESPONSE - ${response}`));
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => res.send(jsonResponse.url));
 });
 
 messagesRouter.post("/", (req, res) => {
@@ -92,7 +94,7 @@ messagesRouter.post("/", (req, res) => {
       content: event.message.text || "_",
       unread: 1,
     };
-    knex("messages")
+    return knex("messages")
       .insert(message)
       .then(() => res.status(201).send())
       .then(() => "SUCCESS - POST /messages")
