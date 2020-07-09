@@ -41,7 +41,7 @@ const storeImages = async (events) => {
 
     const path = `/edy-images/${userId}/${timestamp}.jpg`;
 
-    await fetch(`${url}api/messages/${events[0].message.id}`, {
+    fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
