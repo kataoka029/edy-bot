@@ -20,7 +20,7 @@ describe("GET /api/messages", () => {
     };
     const messages = await getMessages(req);
     expect(messages.length).toBe(3);
-    expect(messages[0].line_message_text).toBe(
+    expect(messages[0].content).toBe(
       "LINEの友達追加ありがとうございます😀ご質問がありましたら、おっしゃってください！"
     );
   });
@@ -32,7 +32,7 @@ describe("GET /api/messages", () => {
       },
     };
     const messages = await getMessages(req);
-    expect(messages[1].line_message_text).toBe(
+    expect(messages[1].content).toBe(
       "いきなりすみません！アルバイトの採用ってしていませんか？💕"
     );
   });

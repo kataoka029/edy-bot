@@ -11,7 +11,7 @@ usersRouter.get("/", (req, res) => {
       messages.line_user_id AS "lineUserId",
       users.id AS "userId",
       messages.line_message_type AS "messageType",
-      messages.line_message_text AS "userText",
+      messages.content AS "content",
       messages.created_at AS "userDate",
       sub2.count AS "unreadCount"
     FROM messages

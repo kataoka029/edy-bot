@@ -56,8 +56,6 @@ const storeImages = async (events) => {
         })
       );
     });
-
-    console.log("DROPBOX - ", dropbox);
   }
 };
 
