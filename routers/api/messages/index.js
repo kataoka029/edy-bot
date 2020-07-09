@@ -1,7 +1,6 @@
 const express = require("express");
 const knexConfig = require("../../../knexfile.js").development;
 const knex = require("knex")(knexConfig);
-// const fetch = require("node-fetch");
 
 const { client, config } = require("../../../config");
 
@@ -21,22 +20,6 @@ messagesRouter.get("/:lineUserId", (req, res) => {
     .then(() => console.log("SUCCESS - GET /messages/:lineUserId"))
     .catch((err) => console.log("ERROR - GET /messages/:lineUserId - ", err));
 });
-
-// messagesRouter.get("/:messageId/image", (req, res) => {
-//   const messageId = req.params.messageId;
-//   return fetch(`https://api-data.line.me/v2/bot/message/${messageId}/content`, {
-//     headers: {
-//       Authorization: `Bearer ${config.channelAccessToken}`,
-//     },
-//   })
-//     .then((response) => res.send(response.body._readableState.buffer.head.data))
-//     .then(() => {
-//       console.log("SUCCESS - GET /messages/:messageId/image");
-//     })
-//     .catch((err) =>
-//       console.log("ERROR - GET /messages/:messageId/image - ", err)
-//     );
-// });
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
@@ -67,6 +50,18 @@ messagesRouter.post("/:lineUserId", (req, res) => {
     .then(res.status(201).send())
     .then(() => console.log("SUCCESS - POST /messgaes/:lineUserId"))
     .catch((err) => console.log("ERROR - POST /messgaes/:lineUserId - ", err));
+});
+
+messagesRouter.patch("/:messageId", (req, res) => {
+  const messageId = req.params.messageId;
+  const content = req.body.content;
+
+  return knex("messages")
+    .where({ line_message_id: messageId })
+    .update({ content })
+    .then(res.status(204).send())
+    .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
+    .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
 });
 
 messagesRouter.patch("/:lineUserId/read", (req, res) => {
