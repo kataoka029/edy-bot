@@ -41,16 +41,13 @@ const storeImages = async (events) => {
 
     const path = `/edy-images/${userId}/${timestamp}.jpg`;
 
-    fetch(`${url}api/messages/${events[0].message.id}`, {
+    await fetch(`${url}api/messages/${events[0].message.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ content: path }),
     });
-    // .then(() => console.log("SUCCESS - PATCH"));
-
-    // console("HERE", path, `${url}api/messages/${events[0].message.id}`);
 
     await fetch(
       `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
