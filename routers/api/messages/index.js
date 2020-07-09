@@ -76,7 +76,7 @@ messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
       },
       method: "POST",
     }
-  ).then((response) => console.log(`${JSON.stringify(response.body)}`));
+  ).then((response) => console.log(`RESPONSE - ${response}`));
 });
 
 messagesRouter.post("/", (req, res) => {
