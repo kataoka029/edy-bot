@@ -34,6 +34,8 @@ const getImageUrl = async (path) => {
     },
   };
 
+  console.log("CONFIG - ", data, dropboxAccessToken);
+
   const res = await fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
     {
