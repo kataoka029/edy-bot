@@ -35,29 +35,33 @@ const getImageUrl = async (path) => {
   };
 
   // console.log("CONFIG - ", data, dropboxAccessToken);
-
-  const res = await fetch(
-    "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
-    {
-      body: JSON.stringify(data),
-      headers: {
-        Authorization: `Bearer ${dropboxAccessToken}`,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }
-  )
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((jsonResponse) => {
-      console.log("JSON RESPONSE - ", jsonResponse);
-      const originalUrl = jsonResponse.url;
-      const url = originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
-      res.send(url);
-    })
-    .catch((err) => console.log(err));
+  try {
+    const res = await fetch(
+      "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+      {
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${dropboxAccessToken}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      }
+    )
+      .then((response) => {
+        // console.log(response);
+        return response.json();
+      })
+      .then((jsonResponse) => {
+        // console.log("JSON RESPONSE - ", jsonResponse);
+        const originalUrl = jsonResponse.url;
+        const url =
+          originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
+        res.send(url);
+      })
+      .catch((err) => console.log(err));
+  } catch (err) {
+    console.log(err);
+  }
 
   const imageUrl = await res.json();
   console.log("IMAGE URL - ", imageUrl);
@@ -99,8 +103,7 @@ const storeImages = async (events) => {
       );
     });
 
-    let imageUrl;
-    await setTimeout(() => (imageUrl = getImageUrl(path)), 1000);
+    const imageUrl = await getImageUrl(path);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
