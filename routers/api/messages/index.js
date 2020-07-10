@@ -69,6 +69,7 @@ messagesRouter.post("/", (req, res) => {
       content: event.message.text || "_",
       unread: 1,
     };
+    console.log("LINE MESSAGE ID - ", message.line_message_id);
     return knex("messages")
       .insert(message)
       .then(() => res.status(201).send())
