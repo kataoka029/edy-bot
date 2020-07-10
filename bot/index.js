@@ -118,6 +118,7 @@ const updateImageUrls = async (events) => {
     const messageId = event.message.id;
     const response = await fetch(`${url}api/messages/${messageId}`);
     const message = await response.json();
+    console.log("MESSAGE - ", message);
     const path = message.path;
     const data = {
       path,
@@ -141,6 +142,7 @@ const updateImageUrls = async (events) => {
     )
       .then((response) => response.json())
       .then((jsonResponse) => {
+        // console.log("JSON RESPONSE - ", jsonResponse);
         const originalUrl = jsonResponse.url;
         const url =
           originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
