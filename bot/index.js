@@ -99,7 +99,8 @@ const storeImages = async (events) => {
       );
     });
 
-    const imageUrl = await setTimeout(() => getImageUrl(path), 1000);
+    let imageUrl;
+    await setTimeout(() => (imageUrl = getImageUrl(path)), 1000);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
