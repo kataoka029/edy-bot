@@ -98,6 +98,7 @@ messagesRouter.post("/", (req, res) => {
       line_user_type: event.source.type,
       line_message_id: event.message.id,
       line_message_type: event.message.type,
+      path: "_",
       content: event.message.text || "_",
       unread: 1,
     };
@@ -111,11 +112,11 @@ messagesRouter.post("/", (req, res) => {
 
 messagesRouter.patch("/:messageId", (req, res) => {
   const messageId = req.params.messageId;
-  const content = req.body.content;
+  const path = req.body.path;
 
   return knex("messages")
     .where({ line_message_id: messageId })
-    .update({ content })
+    .update({ path })
     .then(res.status(204).send())
     .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
     .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));

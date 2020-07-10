@@ -9,7 +9,8 @@ exports.up = function (knex) {
         t.string("line_user_type").notNullable();
         t.string("line_message_id").notNullable();
         t.string("line_message_type").notNullable();
-        t.string("content", 1000);
+        t.string("content", 1000).notNullable();
+        t.string("path").notNullable();
         t.integer("unread").notNullable();
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
         t.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());

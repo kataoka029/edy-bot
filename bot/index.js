@@ -46,7 +46,7 @@ const storeImages = async (events) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ content: path }),
+      body: JSON.stringify({ path }),
     });
 
     await fetch(
