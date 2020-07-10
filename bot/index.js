@@ -23,6 +23,35 @@ const dropbox = dropboxV2Api.authenticate({
   token: dropboxAccessToken,
 });
 
+const getImageUrl = (path) => {
+  const data = {
+    path,
+    settings: {
+      requested_visibility: "public",
+      audience: "public",
+      access: "viewer",
+    },
+  };
+  return fetch(
+    "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+    {
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${dropboxAccessToken}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      const originalUrl = jsonResponse.url;
+      const url = originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
+      res.send(url);
+    })
+    .catch((err) => console.log(err));
+};
+
 const storeImages = async (events) => {
   const res = await fetch(`${url}api/users/${events[0].source.userId}`);
   const users = await res.json();
@@ -40,13 +69,16 @@ const storeImages = async (events) => {
       ("00" + date.getMilliseconds()).slice(-3);
 
     const path = `/edy-images/${userId}/${timestamp}.jpg`;
+    const imgUrl = await getImageUrl(path);
+
+    console.log("PATH - ", path, "IMGURL - ", imgUrl);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ path, imgUrl }),
     });
 
     await fetch(
