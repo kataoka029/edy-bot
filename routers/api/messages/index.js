@@ -57,7 +57,6 @@ messagesRouter.get("/:messageId", (req, res) => {
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
-  console.log("ここevents!!", events);
   for (const event of events) {
     const message = {
       line_type: event.type,
@@ -70,7 +69,6 @@ messagesRouter.post("/", (req, res) => {
       content: event.message.text || "_",
       unread: 1,
     };
-    console.log("LINE MESSAGE ID - ", message.line_message_id);
     knex("messages")
       .insert(message)
       .then(() => res.status(201).send())

@@ -78,8 +78,7 @@ usersRouter.patch("/:lineUserId/messages/content", (req, res) => {
     .select()
     .then((messages) => {
       for (const message of messages) {
-        if (message.line_message_type === "image") {
-          // console.log("MESSAGE - ", message);
+        if (message.line_message_type === "image" && message.content === "_") {
           const data = {
             path: message.path,
             settings: {
@@ -100,28 +99,16 @@ usersRouter.patch("/:lineUserId/messages/content", (req, res) => {
             }
           )
             .then((response) => {
-              // console.log("RESPONSE - ", response);
               return response.json();
             })
             .then((jsonResponse) => {
-              // console.log("JSON RESPONSE - ", jsonResponse);
               const originalUrl = jsonResponse.url;
               const url =
                 originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
-              console.log("IMAGEURL- ", url);
+              console.log("IMAGE URL - ", url);
               return knex("messages")
                 .where({ line_message_id: message.line_message_id })
                 .update({ content: url });
-              // .then(res.status(204).send());
-              // .then(() =>
-              //   console.log("SUCCESS - PATCH /messgaes/:lineUserId/content")
-              // )
-              // .catch((err) =>
-              //   console.log(
-              //     "ERROR - POST /messgaes/:lineUserId/content - ",
-              //     err
-              //   )
-              // );
             })
             .catch((err) => console.log(err));
         }
