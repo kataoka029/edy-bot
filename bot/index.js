@@ -32,7 +32,9 @@ const getImageUrl = (path) => {
       access: "viewer",
     },
   };
-  // console.log("DATA - ", data);
+
+  console.log("L35 - DATA - ", data);
+
   return fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
     {
@@ -88,6 +90,8 @@ const storeImages = async (events) => {
     });
 
     const imgUrl = await getImageUrl(path);
+
+    console.log("L91 - IMGURL - ", imgUrl);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
