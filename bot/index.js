@@ -32,6 +32,7 @@ const getImageUrl = (path) => {
       access: "viewer",
     },
   };
+  // console.log("DATA - ", data);
   return fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
     {
@@ -69,17 +70,6 @@ const storeImages = async (events) => {
       ("00" + date.getMilliseconds()).slice(-3);
 
     const path = `/edy-images/${userId}/${timestamp}.jpg`;
-    const imgUrl = await getImageUrl(path);
-
-    console.log("PATH - ", path, "IMGURL - ", imgUrl);
-
-    fetch(`${url}api/messages/${event.message.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ path, imgUrl }),
-    });
 
     await fetch(
       `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
@@ -95,6 +85,16 @@ const storeImages = async (events) => {
           parameters: { path },
         })
       );
+    });
+
+    const imgUrl = await getImageUrl(path);
+
+    fetch(`${url}api/messages/${event.message.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ path, imgUrl }),
     });
   }
 };
