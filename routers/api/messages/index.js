@@ -57,6 +57,7 @@ messagesRouter.get("/:messageId", (req, res) => {
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
+  console.log("ここevents!!", events);
   for (const event of events) {
     const message = {
       line_type: event.type,
