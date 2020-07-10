@@ -34,7 +34,7 @@ const getImageUrl = async (path) => {
     },
   };
 
-  console.log("CONFIG - ", data, dropboxAccessToken);
+  // console.log("CONFIG - ", data, dropboxAccessToken);
 
   const res = await fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
@@ -96,7 +96,7 @@ const storeImages = async (events) => {
       );
     });
 
-    const imageUrl = getImageUrl(path);
+    const imageUrl = await getImageUrl(path);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
