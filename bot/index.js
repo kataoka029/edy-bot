@@ -47,7 +47,10 @@ const getImageUrl = async (path) => {
       method: "POST",
     }
   )
-    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
     .then((jsonResponse) => {
       console.log("JSON RESPONSE - ", jsonResponse);
       const originalUrl = jsonResponse.url;
