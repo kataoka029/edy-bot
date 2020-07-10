@@ -27,7 +27,7 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           break;
         case "image":
           await uploadImages(events);
-          updateImageUrls(events);
+          await updateImageUrls(events);
           break;
         case "sticker":
           break;
