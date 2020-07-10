@@ -117,9 +117,9 @@ const updateImageUrls = async (events) => {
   for (const event of events) {
     const messageId = event.message.id;
     const response = await fetch(`${url}api/messages/${messageId}`);
-    const message = await response.json();
-    console.log("MESSAGE - ", message);
-    const path = message.path;
+    const messages = await response.json();
+    console.log("MESSAGES - ", messages);
+    const path = messages[0].path;
     const data = {
       path,
       settings: {
@@ -128,6 +128,7 @@ const updateImageUrls = async (events) => {
         access: "viewer",
       },
     };
+    console.log("DATA - ", data);
 
     const res = await fetch(
       "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
