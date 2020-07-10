@@ -80,30 +80,12 @@ messagesRouter.post("/", (req, res) => {
 messagesRouter.patch("/:messageId", (req, res) => {
   const messageId = req.params.messageId;
   const path = req.body.path;
-  const imageUrl = req.body.imageUrl;
-
-  if (path && imageUrl) {
-    return knex("messages")
-      .where({ line_message_id: messageId })
-      .update({ path, content: imageUrl })
-      .then(res.status(204).send())
-      .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
-      .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
-  } else if (path && !imageUrl) {
-    return knex("messages")
-      .where({ line_message_id: messageId })
-      .update({ path })
-      .then(res.status(204).send())
-      .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
-      .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
-  } else if (!path && imageUrl) {
-    return knex("messages")
-      .where({ line_message_id: messageId })
-      .update({ imageUrl })
-      .then(res.status(204).send())
-      .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
-      .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
-  }
+  return knex("messages")
+    .where({ line_message_id: messageId })
+    .update({ path })
+    .then(res.status(204).send())
+    .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
+    .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
 });
 
 module.exports = messagesRouter;

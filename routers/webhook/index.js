@@ -5,7 +5,7 @@ const {
   insertReplyMessage,
   insertUser,
 } = require("../../db");
-const { reply, uploadImages, updateImageUrls } = require("../../bot");
+const { reply, uploadImages } = require("../../bot");
 
 const webhookRouter = express.Router();
 webhookRouter.post("/", lineMiddleware, async (req, res) => {
@@ -16,7 +16,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   events.forEach((event, i) => {
     console.log(`EVENT ${i + 1} - `, event);
   });
-
   switch (event.type) {
     case "message":
       await insertUserMessages(events);
@@ -27,7 +26,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
           break;
         case "image":
           await uploadImages(events);
-          await updateImageUrls(events);
           break;
         case "sticker":
           break;
