@@ -61,6 +61,7 @@ const storeImages = async (events) => {
   const userId = users[0].id;
 
   for (const event of events) {
+    const messageId = event.message.id;
     const date = new Date();
     const timestamp =
       date.getFullYear() +
@@ -74,7 +75,7 @@ const storeImages = async (events) => {
     const path = `/edy-images/${userId}/${timestamp}.jpg`;
 
     await fetch(
-      `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
+      `https://api-data.line.me/v2/bot/message/${messageId}/content`,
       {
         headers: {
           Authorization: `Bearer ${config.channelAccessToken}`,
