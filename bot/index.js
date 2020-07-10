@@ -90,16 +90,17 @@ const storeImages = async (events) => {
       );
     });
 
-    const imgUrl = await fetch(`${url}api/messages/${messageId}/imgUrl`);
+    const res = await fetch(`${url}api/messages/${messageId}/imgUrl`);
+    const imageUrl = res.json();
 
-    console.log("L91 - IMGURL - ", imgUrl);
+    console.log("L91 - imageUrl - ", imageUrl);
 
     fetch(`${url}api/messages/${event.message.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ path, imgUrl }),
+      body: JSON.stringify({ path, imageUrl }),
     });
   }
 };
