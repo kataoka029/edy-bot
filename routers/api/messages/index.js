@@ -55,38 +55,38 @@ messagesRouter.get("/:messageId", (req, res) => {
     .catch((err) => console.log("ERROR - GET /messages/:messageId - ", err));
 });
 
-// messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
-//   const messageId = req.params.messageId;
-//   const response = await fetch(`${url}api/messages/${messageId}`);
-//   const messages = await response.json();
-//   const path = messages[0].path;
-//   const data = {
-//     path,
-//     settings: {
-//       requested_visibility: "public",
-//       audience: "public",
-//       access: "viewer",
-//     },
-//   };
-//   return fetch(
-//     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
-//     {
-//       body: JSON.stringify(data),
-//       headers: {
-//         Authorization: `Bearer ${dropboxAccessToken}`,
-//         "Content-Type": "application/json",
-//       },
-//       method: "POST",
-//     }
-//   )
-//     .then((response) => response.json())
-//     .then((jsonResponse) => {
-//       const originalUrl = jsonResponse.url;
-//       const url = originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
-//       res.send(url);
-//     })
-//     .catch((err) => console.log(err));
-// });
+messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
+  const messageId = req.params.messageId;
+  const response = await fetch(`${url}api/messages/${messageId}`);
+  const messages = await response.json();
+  const path = messages[0].path;
+  const data = {
+    path,
+    settings: {
+      requested_visibility: "public",
+      audience: "public",
+      access: "viewer",
+    },
+  };
+  return fetch(
+    "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+    {
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${dropboxAccessToken}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      const originalUrl = jsonResponse.url;
+      const url = originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
+      res.send(url);
+    })
+    .catch((err) => console.log(err));
+});
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
