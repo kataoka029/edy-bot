@@ -57,19 +57,21 @@ messagesRouter.get("/:messageId", (req, res) => {
 
 messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
   const messageId = req.params.messageId;
-  const message = await fetch(`${url}api/messages/${messageId}`);
-  const path = message.content;
+  const response = await fetch(`${url}api/messages/${messageId}`);
+  const messages = await response.json();
+  const path = messages[0].content;
+  const data = {
+    path,
+    settings: {
+      requested_visibility: "public",
+      audience: "public",
+      access: "viewer",
+    },
+  };
   return fetch(
     "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
     {
-      body: {
-        path,
-        settings: {
-          requested_visibility: "public",
-          audience: "public",
-          access: "viewer",
-        },
-      },
+      body: JSON.stringify(data),
       headers: {
         Authorization: `Bearer ${dropboxAccessToken}`,
         "Content-Type": "application/json",
@@ -78,7 +80,12 @@ messagesRouter.get("/:messageId/imgUrl", async (req, res) => {
     }
   )
     .then((response) => response.json())
-    .then((jsonResponse) => res.send(jsonResponse.url));
+    .then((jsonResponse) => {
+      const originalUrl = jsonResponse.url;
+      const url = originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
+      res.send(url);
+    })
+    .catch((err) => console.log(err));
 });
 
 messagesRouter.post("/", (req, res) => {
