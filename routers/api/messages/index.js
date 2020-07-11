@@ -1,17 +1,19 @@
 const express = require("express");
-const knexConfig = require("../../../knexfile.js").development;
-const knex = require("knex")(knexConfig);
 const fetch = require("node-fetch");
-const { url, dropboxAccessToken } = require("../../../config");
 
+const { dropboxAccessToken } = require("../../../config");
+const knexConfig = require("../../../knexfile.js").development;
+
+const knex = require("knex")(knexConfig);
 const messagesRouter = express.Router();
 
-messagesRouter.get("/", (req, res) => {
+messagesRouter.get("/", () => {
   return [];
 });
 
 messagesRouter.get("/:messageId", (req, res) => {
   const messageId = req.params.messageId;
+
   if (messageId === "latest") {
     return knex
       .raw(
@@ -44,19 +46,25 @@ messagesRouter.get("/:messageId", (req, res) => {
           ON messages.line_user_id = users.line_user_id
       ORDER BY messages.created_at DESC`
       )
-      .then((users) => res.send(users.rows))
-      .catch((err) => res.status(400).send(err.message));
+      .then((messages) => res.send(messages.rows))
+      .then(() => console.log("SUCCESS - GET /api/messages/:messageId"))
+      .catch((err) =>
+        console.log("ERROR - GET /api/messages/:messageId - ", err)
+      );
   }
   return knex("messages")
     .where({ line_message_id: messageId })
     .select()
-    .then((message) => res.send(message))
-    .then(() => console.log("SUCCESS - GET /messages/:messageId"))
-    .catch((err) => console.log("ERROR - GET /messages/:messageId - ", err));
+    .then((messages) => res.send(messages))
+    .then(() => console.log("SUCCESS - GET /api/messages/:messageId"))
+    .catch((err) =>
+      console.log("ERROR - GET /api/messages/:messageId - ", err)
+    );
 });
 
 messagesRouter.post("/", (req, res) => {
   const events = req.body;
+
   for (const event of events) {
     const message = {
       line_type: event.type,
@@ -72,8 +80,8 @@ messagesRouter.post("/", (req, res) => {
     knex("messages")
       .insert(message)
       .then(() => res.status(201).send())
-      .then(() => "SUCCESS - POST /messages")
-      .catch((err) => console.log("ERROR - POST /messages - ", err));
+      .then(() => "SUCCESS - POST /api/messages")
+      .catch((err) => console.log("ERROR - POST /api/messages - ", err));
   }
 });
 
@@ -102,9 +110,7 @@ messagesRouter.patch("/content", (req, res) => {
               method: "POST",
             }
           )
-            .then((response) => {
-              return response.json();
-            })
+            .then((response) => response.json())
             .then((jsonResponse) => {
               const originalUrl = jsonResponse.url;
               const url =
@@ -119,18 +125,21 @@ messagesRouter.patch("/content", (req, res) => {
     })
     .then(res.status(204).send())
     .then(() => console.log("SUCCESS - PATCH /api/messgaes/content"))
-    .catch((err) => console.log("ERROR - POST /api/messgaes/content - ", err));
+    .catch((err) => console.log("ERROR - PATCH /api/messgaes/content - ", err));
 });
 
-messagesRouter.patch("/:messageId", (req, res) => {
+messagesRouter.patch("/:messageId/path", (req, res) => {
   const messageId = req.params.messageId;
   const path = req.body.path;
+
   return knex("messages")
     .where({ line_message_id: messageId })
     .update({ path })
     .then(res.status(204).send())
-    .then(() => console.log("SUCCESS - PATCH /messgaes/:messageId"))
-    .catch((err) => console.log("ERROR - POST /messgaes/:messageId - ", err));
+    .then(() => console.log("SUCCESS - PATCH /api/messgaes/:messageId"))
+    .catch((err) =>
+      console.log("ERROR - PATCH /api/messgaes/:messageId - ", err)
+    );
 });
 
 module.exports = messagesRouter;

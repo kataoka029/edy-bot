@@ -1,6 +1,11 @@
-const { config, client, url, dropboxAccessToken } = require("../config");
 const fetch = require("node-fetch");
 const dropboxV2Api = require("dropbox-v2-api");
+
+const { config, client, url, dropboxAccessToken } = require("../config");
+
+const dropbox = dropboxV2Api.authenticate({
+  token: dropboxAccessToken,
+});
 
 const createReplyObject = (events) => {
   const text = events[0].message.text;
@@ -19,17 +24,12 @@ const reply = async (events) => {
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
-const dropbox = dropboxV2Api.authenticate({
-  token: dropboxAccessToken,
-});
-
 const uploadImages = async (events) => {
-  const res = await fetch(`${url}api/users/${events[0].source.userId}`);
-  const users = await res.json();
-  const userId = users[0].id;
+  const response = await fetch(`${url}api/users/${events[0].source.userId}`);
+  const users = await response.json();
+  const user = users[0];
 
   for (const event of events) {
-    const messageId = event.message.id;
     const date = new Date();
     const timestamp =
       date.getFullYear() +
@@ -39,18 +39,17 @@ const uploadImages = async (events) => {
       ("0" + date.getMinutes()).slice(-2) +
       ("0" + date.getSeconds()).slice(-2) +
       ("00" + date.getMilliseconds()).slice(-3);
-
-    const path = `/edy-images/${userId}/${timestamp}.jpg`;
+    const path = `/edy-images/${user.id}/${timestamp}.jpg`;
 
     await fetch(
-      `https://api-data.line.me/v2/bot/message/${messageId}/content`,
+      `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
       {
         headers: {
           Authorization: `Bearer ${config.channelAccessToken}`,
         },
       }
-    ).then((res) => {
-      res.body.pipe(
+    ).then((response) => {
+      response.body.pipe(
         dropbox({
           resource: "files/upload",
           parameters: { path },
@@ -58,13 +57,15 @@ const uploadImages = async (events) => {
       );
     });
 
-    fetch(`${url}api/messages/${event.message.id}`, {
+    fetch(`${url}api/messages/${event.message.id}/path`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ path }),
-    });
+    })
+      .then(() => console.log("SUCCESS - uploadImages()"))
+      .catch((err) => console.log("ERROR - uploadImages() - ", err));
   }
 };
 

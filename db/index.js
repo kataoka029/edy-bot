@@ -1,7 +1,8 @@
 const fetch = require("node-fetch");
+const _ = require("lodash");
+
 const { url } = require("../config");
 const { createReplyObject } = require("../bot");
-const _ = require("lodash");
 
 const insertUserMessages = async (events) => {
   await fetch(`${url}api/messages`, {
@@ -23,6 +24,7 @@ const insertReplyMessage = async (events) => {
   replyEvents[0].message.id = "_";
   replyEvents[0].message.type = replyObject.type;
   replyEvents[0].message.text = replyObject.text;
+
   await fetch(`${url}api/messages`, {
     method: "POST",
     headers: {
