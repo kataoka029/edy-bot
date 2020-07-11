@@ -40,7 +40,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
 
     case "follow":
       await insertUser(events);
-      console.log("PROFILE - ", profile);
       io.emit("refetch", { event });
       break;
   }

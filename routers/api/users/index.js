@@ -35,9 +35,11 @@ usersRouter.post("/", (req, res) => {
   const event = req.body[0];
   const user = {
     line_user_id: event.source.userId,
+    profile_name: "_",
     last_name: "_",
     first_name: "_",
     email: "_",
+    image_url: "_",
   };
 
   return knex("users")
