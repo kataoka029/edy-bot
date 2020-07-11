@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { lineMiddleware } = require("../../config");
+const { client, lineMiddleware } = require("../../config");
 const {
   insertUserMessages,
   insertReplyMessage,
@@ -40,6 +40,8 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
 
     case "follow":
       await insertUser(events);
+      const profile = await client.getProfile(event.source.userId);
+      console.log("PROFILE - ", profile);
       io.emit("refetch", { event });
       break;
   }
