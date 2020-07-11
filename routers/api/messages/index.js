@@ -77,6 +77,51 @@ messagesRouter.post("/", (req, res) => {
   }
 });
 
+messagesRouter.patch("/content", (req, res) => {
+  return knex("messages")
+    .select()
+    .then((messages) => {
+      for (const message of messages) {
+        if (message.line_message_type === "image" && message.content === "_") {
+          const data = {
+            path: message.path,
+            settings: {
+              requested_visibility: "public",
+              audience: "public",
+              access: "viewer",
+            },
+          };
+          fetch(
+            "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+            {
+              body: JSON.stringify(data),
+              headers: {
+                Authorization: `Bearer ${dropboxAccessToken}`,
+                "Content-Type": "application/json",
+              },
+              method: "POST",
+            }
+          )
+            .then((response) => {
+              return response.json();
+            })
+            .then((jsonResponse) => {
+              const originalUrl = jsonResponse.url;
+              const url =
+                originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
+              return knex("messages")
+                .where({ line_message_id: message.line_message_id })
+                .update({ content: url });
+            })
+            .catch((err) => console.log(err));
+        }
+      }
+    })
+    .then(res.status(204).send())
+    .then(() => console.log("SUCCESS - PATCH /api/messgaes/content"))
+    .catch((err) => console.log("ERROR - POST /api/messgaes/content - ", err));
+});
+
 messagesRouter.patch("/:messageId", (req, res) => {
   const messageId = req.params.messageId;
   const path = req.body.path;
