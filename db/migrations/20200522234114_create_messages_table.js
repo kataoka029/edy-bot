@@ -3,17 +3,15 @@ exports.up = function (knex) {
     if (!exists) {
       return knex.schema.createTable("messages", (t) => {
         t.increments().primary();
-        t.string("line_type").notNullable();
-        t.string("line_reply_token").notNullable();
         t.string("line_user_id").notNullable();
-        t.string("line_user_type").notNullable();
         t.string("line_message_id").notNullable();
-        t.string("line_message_type").notNullable();
-        t.string("content", 1000).notNullable();
-        t.string("path").notNullable();
+        t.string("type").notNullable();
+        t.string("text", 1000).notNullable();
+        t.string("image_path").notNullable();
+        t.string("image_url").notNullable();
+        t.string("reply_token").notNullable();
         t.integer("unread").notNullable();
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
-        t.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
       });
     } else {
       return new Error("The table already exists.");

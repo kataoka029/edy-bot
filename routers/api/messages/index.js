@@ -18,12 +18,12 @@ messagesRouter.get("/:messageId", (req, res) => {
     return knex
       .raw(
         `SELECT
-        messages.line_user_id AS "lineUserId",
-        users.id AS "userId",
-        messages.line_message_type AS "messageType",
-        messages.content AS "content",
-        messages.created_at AS "userDate",
-        sub2.count AS "unreadCount"
+        messages.line_user_id,
+        users.id AS "user_id",
+        messages.type,
+        messages.text,
+        messages.created_at,
+        sub2.count AS "unread_count"
       FROM messages
         INNER JOIN (
           SELECT
@@ -67,14 +67,13 @@ messagesRouter.post("/", (req, res) => {
 
   for (const event of events) {
     const message = {
-      line_type: event.type,
-      line_reply_token: event.replyToken,
       line_user_id: event.source.userId,
-      line_user_type: event.source.type,
       line_message_id: event.message.id,
-      line_message_type: event.message.type,
-      path: "_",
-      content: event.message.text || "_",
+      type: event.message.type,
+      text: event.message.text || "_",
+      image_path: "_",
+      image_url: "_",
+      reply_token: event.replyToken,
       unread: 1,
     };
     knex("messages")
@@ -90,9 +89,9 @@ messagesRouter.patch("/content", (req, res) => {
     .select()
     .then((messages) => {
       for (const message of messages) {
-        if (message.line_message_type === "image" && message.content === "_") {
+        if (message.type === "image" && message.text === "_") {
           const data = {
-            path: message.path,
+            path: message.image_path,
             settings: {
               requested_visibility: "public",
               audience: "public",
@@ -130,11 +129,11 @@ messagesRouter.patch("/content", (req, res) => {
 
 messagesRouter.patch("/:messageId/path", (req, res) => {
   const messageId = req.params.messageId;
-  const path = req.body.path;
+  const image_path = req.body.path;
 
   return knex("messages")
     .where({ line_message_id: messageId })
-    .update({ path })
+    .update({ image_path })
     .then(res.status(204).send())
     .then(() => console.log("SUCCESS - PATCH /api/messgaes/:messageId"))
     .catch((err) =>

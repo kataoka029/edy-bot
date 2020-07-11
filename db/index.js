@@ -20,7 +20,6 @@ const insertReplyMessage = async (events) => {
   const replyObject = createReplyObject(events);
   const replyEvents = _.cloneDeep(events);
   replyEvents[0].replyToken = "_";
-  replyEvents[0].source.type = "edy";
   replyEvents[0].message.id = "_";
   replyEvents[0].message.type = replyObject.type;
   replyEvents[0].message.text = replyObject.text;
@@ -37,6 +36,8 @@ const insertReplyMessage = async (events) => {
 };
 
 const insertUser = async (events) => {
+  // const profile = await client.getProfile(event.source.userId);
+
   await fetch(`${url}api/users`, {
     method: "POST",
     headers: {
