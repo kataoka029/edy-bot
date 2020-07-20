@@ -39,7 +39,7 @@ const uploadImages = async (events) => {
       ("0" + date.getMinutes()).slice(-2) +
       ("0" + date.getSeconds()).slice(-2) +
       ("00" + date.getMilliseconds()).slice(-3);
-    const path = `/edy-images/${user.id}/${timestamp}.jpg`;
+    const imagePath = `/edy-images/${user.id}/${timestamp}.jpg`;
 
     await fetch(
       `https://api-data.line.me/v2/bot/message/${event.message.id}/content`,
@@ -52,7 +52,7 @@ const uploadImages = async (events) => {
       response.body.pipe(
         dropbox({
           resource: "files/upload",
-          parameters: { path },
+          parameters: { path: imagePath },
         })
       );
     });
@@ -62,7 +62,7 @@ const uploadImages = async (events) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ image_path: imagePath }),
     })
       .then(() => console.log("SUCCESS - uploadImages()"))
       .catch((err) => console.log("ERROR - uploadImages() - ", err));

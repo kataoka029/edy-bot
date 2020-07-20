@@ -88,38 +88,42 @@ messagesRouter.patch("/content", (req, res) => {
   return knex("messages")
     .select()
     .then((messages) => {
-      for (const message of messages) {
-        if (message.type === "image" && message.text === "_") {
-          const data = {
-            path: message.image_path,
-            settings: {
-              requested_visibility: "public",
-              audience: "public",
-              access: "viewer",
+      const targetMessages = messages.filter(
+        (message) => message.image_path !== "_" && message.image_url === "_"
+      );
+
+      for (const message of targetMessages) {
+        const data = {
+          path: message.image_path,
+          settings: {
+            requested_visibility: "public",
+            audience: "public",
+            access: "viewer",
+          },
+        };
+        fetch(
+          "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+          {
+            body: JSON.stringify(data),
+            headers: {
+              Authorization: `Bearer ${dropboxAccessToken}`,
+              "Content-Type": "application/json",
             },
-          };
-          fetch(
-            "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
-            {
-              body: JSON.stringify(data),
-              headers: {
-                Authorization: `Bearer ${dropboxAccessToken}`,
-                "Content-Type": "application/json",
-              },
-              method: "POST",
-            }
-          )
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-              const originalUrl = jsonResponse.url;
+            method: "POST",
+          }
+        )
+          .then((response) => response.json())
+          .then((jsonResponse) => {
+            const originalUrl = jsonResponse.url;
+            if (originalUrl) {
               const url =
                 originalUrl.slice(0, originalUrl.indexOf("?") + 1) + "raw=1";
               return knex("messages")
                 .where({ line_message_id: message.line_message_id })
-                .update({ content: url });
-            })
-            .catch((err) => console.log(err));
-        }
+                .update({ image_url: url });
+            }
+          })
+          .catch((err) => console.log(err));
       }
     })
     .then(res.status(204).send())
@@ -129,15 +133,15 @@ messagesRouter.patch("/content", (req, res) => {
 
 messagesRouter.patch("/:messageId/path", (req, res) => {
   const messageId = req.params.messageId;
-  const image_path = req.body.path;
+  const image_path = req.body.image_path;
 
   return knex("messages")
     .where({ line_message_id: messageId })
     .update({ image_path })
     .then(res.status(204).send())
-    .then(() => console.log("SUCCESS - PATCH /api/messgaes/:messageId"))
+    .then(() => console.log("SUCCESS - PATCH /api/messgaes/:messageId/path"))
     .catch((err) =>
-      console.log("ERROR - PATCH /api/messgaes/:messageId - ", err)
+      console.log("ERROR - PATCH /api/messgaes/:messageId/path - ", err)
     );
 });
 
