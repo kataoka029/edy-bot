@@ -62,7 +62,7 @@ const uploadImages = async (events) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ image_path: imagePath }),
+      body: JSON.stringify({ imagePath }),
     })
       .then(() => console.log("SUCCESS - uploadImages()"))
       .catch((err) => console.log("ERROR - uploadImages() - ", err));

@@ -45,8 +45,6 @@ webhookRouter.post("/", lineMiddleware, async (req, res) => {
   }
 
   res.status(200).send();
-  // .then(() => console.log("SUCCESS - POST /webhook"))
-  // .catch((err) => console.log("ERROR - POST /webhook - ", err));
 });
 
 module.exports = webhookRouter;
