@@ -7,6 +7,8 @@ const knexConfig = require("../../knexfile.js").development;
 const knex = require("knex")(knexConfig);
 const apiRouter = express.Router();
 
+// GET
+
 apiRouter.get("/messages", () => {
   return [];
 });
@@ -20,6 +22,7 @@ apiRouter.get("/messages/:id", (req, res) => {
         `SELECT
         messages.line_user_id,
         users.id AS "user_id",
+        users.to_check,
         messages.type,
         messages.text,
         messages.created_at,
@@ -47,7 +50,6 @@ apiRouter.get("/messages/:id", (req, res) => {
       ORDER BY messages.created_at DESC`
       )
       .then((messages) => res.send(messages.rows))
-      .then(() => console.log("SUCCESS - GET /api/messages/:messageId"))
       .catch((err) =>
         console.log("ERROR - GET /api/messages/:messageId - ", err)
       );
@@ -56,7 +58,6 @@ apiRouter.get("/messages/:id", (req, res) => {
     .where({ line_message_id: messageId })
     .select()
     .then((messages) => res.send(messages))
-    .then(() => console.log("SUCCESS - GET /api/messages/:id"))
     .catch((err) => console.log("ERROR - GET /api/messages/:id - ", err));
 });
 
@@ -67,7 +68,6 @@ apiRouter.get("/users/:id", (req, res) => {
     .where({ line_user_id: lineUserId })
     .select()
     .then((user) => res.send(user))
-    .then(() => console.log("SUCCESS - GET /api/users/:id"))
     .catch((err) => console.log("ERROR - GET /api/users/:id - ", err));
 });
 
@@ -79,9 +79,10 @@ apiRouter.get("/users/:id/messages", (req, res) => {
     .orderBy("created_at")
     .select()
     .then((messages) => res.send(messages))
-    .then(() => console.log("SUCCESS - GET /api/users/:id/messages"))
     .catch((err) => console.log("ERROR - GET /api/users/:id/messages - ", err));
 });
+
+// POST
 
 apiRouter.post("/messages", (req, res) => {
   const events = req.body;
@@ -100,7 +101,6 @@ apiRouter.post("/messages", (req, res) => {
     knex("messages")
       .insert(message)
       .then(() => res.status(201).send())
-      .then(() => "SUCCESS - POST /api/messages")
       .catch((err) => console.log("ERROR - POST /api/messages - ", err));
   }
 });
@@ -114,19 +114,19 @@ apiRouter.post("/users", (req, res) => {
     first_name: "_",
     email: "_",
     image_url: "_",
+    to_check: 0,
   };
 
   return knex("users")
+    .where({ line_user_id: event.source.userId })
     .select()
-    .where("line_user_id", event.source.userId)
-    .then((rows) => {
-      if (rows.length === 0) {
+    .then((users) => {
+      if (users.length === 0) {
         knex("users")
           .insert(user)
           .then(() => res.status(201).send());
       }
     })
-    .then(() => console.log("SUCCESS - POST /api/users"))
     .catch((err) => console.log("ERROR - POST /api/users - ", err));
 });
 
@@ -137,11 +137,12 @@ apiRouter.post("/users/:id/messages", (req, res) => {
   client
     .pushMessage(lineUserId, message)
     .then(res.status(201).send())
-    .then(() => console.log("SUCCESS - POST /api/users/:lineUserId/messages"))
     .catch((err) =>
       console.log("ERROR - POST /api/users/:lineUserId/messages - ", err)
     );
 });
+
+// PATCH
 
 apiRouter.patch("/messages/url", (req, res) => {
   return knex("messages")
@@ -186,7 +187,6 @@ apiRouter.patch("/messages/url", (req, res) => {
       }
     })
     .then(res.status(204).send())
-    .then(() => console.log("SUCCESS - PATCH /api/messgaes/content"))
     .catch((err) => console.log("ERROR - PATCH /api/messgaes/content - ", err));
 });
 
@@ -198,10 +198,37 @@ apiRouter.patch("/messages/:id/path", (req, res) => {
     .where({ line_message_id: messageId })
     .update({ image_path: imagePath })
     .then(res.status(204).send())
-    .then(() => console.log("SUCCESS - PATCH /api/messgaes/:id/path"))
     .catch((err) =>
       console.log("ERROR - PATCH /api/messgaes/:id/path - ", err)
     );
+});
+
+apiRouter.patch("/users/:id/check", (req, res) => {
+  const lineUserId = req.params.id;
+
+  return knex("users")
+    .where({ line_user_id: lineUserId })
+    .select()
+    .then((users) => {
+      const user = users[0];
+      if (user.to_check === 0) {
+        knex("users")
+          .where({ line_user_id: lineUserId })
+          .update({ to_check: 1 })
+          .then(res.status(204).send())
+          .catch((err) =>
+            console.log("ERROR - POST /api/users/:id/check - ", err)
+          );
+      } else {
+        knex("users")
+          .where({ line_user_id: lineUserId })
+          .update({ to_check: 0 })
+          .then(res.status(204).send())
+          .catch((err) =>
+            console.log("ERROR - POST /api/users/:id/check - ", err)
+          );
+      }
+    });
 });
 
 apiRouter.patch("/users/:id/messages/read", (req, res) => {
@@ -210,7 +237,6 @@ apiRouter.patch("/users/:id/messages/read", (req, res) => {
     .where({ line_user_id: lineUserId })
     .update({ unread: 0 })
     .then(res.status(204).send())
-    .then(() => console.log("SUCCESS - PATCH /api/users/:id/messages/read"))
     .catch((err) =>
       console.log("ERROR - POST /api/users/:id/messages/read - ", err)
     );

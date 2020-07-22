@@ -11,6 +11,7 @@ exports.seed = function (knex) {
           email: "shuntaro.kataoka@emptydressy.com",
           image_url:
             "https://illalet.com/wp-content/uploads/illust/16_2_424.png",
+          to_check: 0,
           created_at: "2020-05-24 05:33:57.292593+00",
         },
       ]);

@@ -20,7 +20,6 @@ const reply = async (events) => {
   const replyObject = createReplyObject(events);
   client
     .replyMessage(event.replyToken, [replyObject])
-    .then(() => console.log("SUCCESS - reply()"))
     .catch((err) => console.log("ERROR - reply() - ", err));
 };
 
@@ -63,9 +62,7 @@ const uploadImages = async (events) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ imagePath }),
-    })
-      .then(() => console.log("SUCCESS - uploadImages()"))
-      .catch((err) => console.log("ERROR - uploadImages() - ", err));
+    }).catch((err) => console.log("ERROR - uploadImages() - ", err));
   }
 };
 

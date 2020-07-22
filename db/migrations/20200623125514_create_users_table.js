@@ -9,6 +9,7 @@ exports.up = function (knex) {
         t.string("last_name").notNullable();
         t.string("email").notNullable();
         t.string("image_url").notNullable();
+        t.integer("to_check").notNullable();
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
       });
     } else {

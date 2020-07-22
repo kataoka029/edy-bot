@@ -11,9 +11,7 @@ const insertUserMessages = async (events) => {
       "Content-Type": "application/json; charset=utf-8",
     },
     body: JSON.stringify(events),
-  })
-    .then(() => console.log("SUCCESS - insertUserMessages()"))
-    .catch((err) => console.log("ERROR - insertUserMessages() - ", err));
+  }).catch((err) => console.log("ERROR - insertUserMessages() - ", err));
 };
 
 const insertReplyMessage = async (events) => {
@@ -30,9 +28,7 @@ const insertReplyMessage = async (events) => {
       "Content-Type": "application/json; charset=utf-8",
     },
     body: JSON.stringify(replyEvents),
-  })
-    .then(() => console.log("SUCCESS - insertReplyMessage()"))
-    .catch((err) => console.log("ERROR - insertReplyMessage() - ", err));
+  }).catch((err) => console.log("ERROR - insertReplyMessage() - ", err));
 };
 
 const insertUser = async (events) => {
@@ -44,9 +40,7 @@ const insertUser = async (events) => {
       "Content-Type": "application/json; charset=utf-8",
     },
     body: JSON.stringify(events),
-  })
-    .then(() => console.log("SUCCESS - insertUser()"))
-    .catch((err) => console.log("ERROR - insertUser() - ", err));
+  }).catch((err) => console.log("ERROR - insertUser() - ", err));
 };
 
 module.exports = { insertUserMessages, insertReplyMessage, insertUser };
