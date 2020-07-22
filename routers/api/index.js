@@ -19,6 +19,9 @@ apiRouter.get("/messages/:id", (req, res) => {
   SELECT
     messages.line_user_id,
     users.id AS "user_id",
+    users.profile_name,
+    users.first_name,
+    users.last_name,
     users.to_check,
     messages.type,
     messages.text,
