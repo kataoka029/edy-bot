@@ -15,40 +15,40 @@ apiRouter.get("/messages", () => {
 
 apiRouter.get("/messages/:id", (req, res) => {
   const messageId = req.params.id;
+  const query = `
+  SELECT
+    messages.line_user_id,
+    users.id AS "user_id",
+    users.to_check,
+    messages.type,
+    messages.text,
+    messages.created_at,
+    sub2.count AS "unread_count"
+  FROM messages
+    INNER JOIN (
+      SELECT
+        line_user_id,
+        MAX(created_at) AS created_at
+      FROM messages
+      GROUP BY line_user_id
+      ) AS sub1
+        ON messages.line_user_id = sub1.line_user_id AND messages.created_at = sub1.created_at
+    LEFT JOIN(
+      SELECT
+        line_user_id,
+        count(*)
+      FROM messages
+      WHERE unread = 1
+      GROUP BY line_user_id
+      ) AS sub2
+        ON messages.line_user_id = sub2.line_user_id
+    LEFT JOIN users
+      ON messages.line_user_id = users.line_user_id
+  ORDER BY messages.created_at DESC`;
 
   if (messageId === "latest") {
     return knex
-      .raw(
-        `SELECT
-        messages.line_user_id,
-        users.id AS "user_id",
-        users.to_check,
-        messages.type,
-        messages.text,
-        messages.created_at,
-        sub2.count AS "unread_count"
-      FROM messages
-        INNER JOIN (
-          SELECT
-            line_user_id,
-            MAX(created_at) AS created_at
-          FROM messages
-          GROUP BY line_user_id
-          ) AS sub1
-            ON messages.line_user_id = sub1.line_user_id AND messages.created_at = sub1.created_at
-        LEFT JOIN(
-          SELECT
-            line_user_id,
-            count(*)
-          FROM messages
-          WHERE unread = 1
-          GROUP BY line_user_id
-          ) AS sub2
-            ON messages.line_user_id = sub2.line_user_id
-        LEFT JOIN users
-          ON messages.line_user_id = users.line_user_id
-      ORDER BY messages.created_at DESC`
-      )
+      .raw(query)
       .then((messages) => res.send(messages.rows))
       .catch((err) =>
         console.log("ERROR - GET /api/messages/:messageId - ", err)
@@ -205,30 +205,16 @@ apiRouter.patch("/messages/:id/path", (req, res) => {
 
 apiRouter.patch("/users/:id/check", (req, res) => {
   const lineUserId = req.params.id;
+  const query = `
+  UPDATE users
+  SET to_check =
+    CASE
+      WHEN to_check = 0 THEN 1
+      ELSE 0
+    END
+    WHERE line_user_id = '${lineUserId}'`;
 
-  return knex("users")
-    .where({ line_user_id: lineUserId })
-    .select()
-    .then((users) => {
-      const user = users[0];
-      if (user.to_check === 0) {
-        knex("users")
-          .where({ line_user_id: lineUserId })
-          .update({ to_check: 1 })
-          .then(res.status(204).send())
-          .catch((err) =>
-            console.log("ERROR - POST /api/users/:id/check - ", err)
-          );
-      } else {
-        knex("users")
-          .where({ line_user_id: lineUserId })
-          .update({ to_check: 0 })
-          .then(res.status(204).send())
-          .catch((err) =>
-            console.log("ERROR - POST /api/users/:id/check - ", err)
-          );
-      }
-    });
+  return knex.raw(query).then(res.status(204).send());
 });
 
 apiRouter.patch("/users/:id/messages/read", (req, res) => {
