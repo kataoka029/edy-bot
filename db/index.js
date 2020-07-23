@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const _ = require("lodash");
 
-const { url } = require("../config");
+const { client, url } = require("../config");
 const { createReplyObject } = require("../bot");
 
 const insertUserMessages = async (events) => {
@@ -32,14 +32,15 @@ const insertReplyMessage = async (events) => {
 };
 
 const insertUser = async (events) => {
-  // const profile = await client.getProfile(event.source.userId);
+  const event = events[0];
+  const profile = await client.getProfile(event.source.userId);
 
   await fetch(`${url}api/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
-    body: JSON.stringify(events),
+    body: JSON.stringify(profile),
   }).catch((err) => console.log("ERROR - insertUser() - ", err));
 };
 

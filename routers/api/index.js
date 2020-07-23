@@ -8,60 +8,61 @@ const knex = require("knex")(knexConfig);
 const apiRouter = express.Router();
 
 // GET
-
 apiRouter.get("/messages", () => {
   return [];
 });
 
 apiRouter.get("/messages/:id", (req, res) => {
   const messageId = req.params.id;
-  const query = `
-  SELECT
-    messages.line_user_id,
-    users.id AS "user_id",
-    users.profile_name,
-    users.first_name,
-    users.last_name,
-    users.to_check,
-    messages.type,
-    messages.text,
-    messages.created_at,
-    sub2.count AS "unread_count"
-  FROM messages
-    INNER JOIN (
-      SELECT
-        line_user_id,
-        MAX(created_at) AS created_at
-      FROM messages
-      GROUP BY line_user_id
-      ) AS sub1
-        ON messages.line_user_id = sub1.line_user_id AND messages.created_at = sub1.created_at
-    LEFT JOIN(
-      SELECT
-        line_user_id,
-        count(*)
-      FROM messages
-      WHERE unread = 1
-      GROUP BY line_user_id
-      ) AS sub2
-        ON messages.line_user_id = sub2.line_user_id
-    LEFT JOIN users
-      ON messages.line_user_id = users.line_user_id
-  ORDER BY messages.created_at DESC`;
 
-  if (messageId === "latest") {
-    return knex
-      .raw(query)
-      .then((messages) => res.send(messages.rows))
-      .catch((err) =>
-        console.log("ERROR - GET /api/messages/:messageId - ", err)
-      );
-  }
   return knex("messages")
     .where({ line_message_id: messageId })
     .select()
     .then((messages) => res.send(messages))
     .catch((err) => console.log("ERROR - GET /api/messages/:id - ", err));
+});
+
+apiRouter.get("/users", (req, res) => {
+  const query = `
+    SELECT
+      messages.line_user_id,
+      users.id AS "user_id",
+      users.profile_name,
+      users.first_name,
+      users.last_name,
+      users.email,
+      users.image_url,
+      users.to_check,
+      messages.type AS "text_type",
+      messages.text,
+      messages.created_at,
+      sub2.count AS "unread_count"
+    FROM messages
+      INNER JOIN (
+        SELECT
+          line_user_id,
+          MAX(created_at) AS created_at
+        FROM messages
+        GROUP BY line_user_id
+        ) AS sub1
+          ON messages.line_user_id = sub1.line_user_id AND messages.created_at = sub1.created_at
+      LEFT JOIN(
+        SELECT
+          line_user_id,
+          count(*)
+        FROM messages
+        WHERE unread = 1
+        GROUP BY line_user_id
+        ) AS sub2
+          ON messages.line_user_id = sub2.line_user_id
+      LEFT JOIN users
+        ON messages.line_user_id = users.line_user_id
+    ORDER BY messages.created_at DESC`;
+
+  return knex
+    .raw(query)
+    .then((users) => res.send(users.rows))
+    .catch((err) => console.log("ERROR - GET /api/users - ", err));
 });
 
 apiRouter.get("/users/:id", (req, res) => {
@@ -86,7 +87,6 @@ apiRouter.get("/users/:id/messages", (req, res) => {
 });
 
 // POST
-
 apiRouter.post("/messages", (req, res) => {
   const events = req.body;
 
@@ -109,19 +109,19 @@ apiRouter.post("/messages", (req, res) => {
 });
 
 apiRouter.post("/users", (req, res) => {
-  const event = req.body[0];
+  const profile = req.body;
   const user = {
-    line_user_id: event.source.userId,
-    profile_name: "_",
+    line_user_id: profile.userId,
+    profile_name: profile.displayName,
     last_name: "_",
     first_name: "_",
     email: "_",
-    image_url: "_",
+    image_url: profile.pictureUrl,
     to_check: 0,
   };
 
   return knex("users")
-    .where({ line_user_id: event.source.userId })
+    .where({ line_user_id: profile.userId })
     .select()
     .then((users) => {
       if (users.length === 0) {
@@ -146,7 +146,6 @@ apiRouter.post("/users/:id/messages", (req, res) => {
 });
 
 // PATCH
-
 apiRouter.patch("/messages/url", (req, res) => {
   return knex("messages")
     .select()
