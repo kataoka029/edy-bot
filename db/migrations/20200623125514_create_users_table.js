@@ -7,6 +7,7 @@ exports.up = function (knex) {
         t.string("profile_name").notNullable();
         t.string("first_name").notNullable();
         t.string("last_name").notNullable();
+        t.string("phone_number").notNullable();
         t.string("email").notNullable();
         t.string("image_url").notNullable();
         t.integer("to_check").notNullable();

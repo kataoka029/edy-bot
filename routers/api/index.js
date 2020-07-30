@@ -115,6 +115,7 @@ apiRouter.post("/users", (req, res) => {
     profile_name: profile.displayName,
     last_name: "_",
     first_name: "_",
+    phone_number: "_",
     email: "_",
     image_url: profile.pictureUrl,
     to_check: 0,
