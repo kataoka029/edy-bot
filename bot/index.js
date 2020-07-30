@@ -2,16 +2,25 @@ const fetch = require("node-fetch");
 const dropboxV2Api = require("dropbox-v2-api");
 
 const { config, client, url, dropboxAccessToken } = require("../config");
+const { createReplyText } = require("./logic");
 
 const dropbox = dropboxV2Api.authenticate({
   token: dropboxAccessToken,
 });
 
+// const createReplyText = (text) => {
+//   return text.match(/営業時間|営業.*何時/)
+//     ? "「営業時間」ですね。\n当店は24時間年中無休で営業しております。"
+//     : text.match(/場所.*分から/)
+//     ? "「店舗の場所」ですね。\nGoogle Mapのリンクを共有いたします。\nhttps://goo.gl/maps/MDC5eEHL2AKamBfPA"
+//     : "よく分かりません。";
+// };
+
 const createReplyObject = (events) => {
   const text = events[0].message.text;
   return {
     type: "text",
-    text: `「${text}」ですね。申し訳ないのですが、言葉の意味がよく分かりません😰なるべく早く担当からご連絡させていただきますので、少々お待ちください🙇‍♀️`,
+    text: createReplyText(text),
   };
 };
 
@@ -25,8 +34,7 @@ const reply = async (events) => {
 
 const uploadImages = async (events) => {
   const response = await fetch(`${url}api/users/${events[0].source.userId}`);
-  const users = await response.json();
-  const user = users[0];
+  const user = await response.json();
 
   for (const event of events) {
     const date = new Date();

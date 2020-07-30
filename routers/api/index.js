@@ -71,7 +71,7 @@ apiRouter.get("/users/:id", (req, res) => {
   return knex("users")
     .where({ line_user_id: lineUserId })
     .select()
-    .then((user) => res.send(user))
+    .then((users) => res.send(users[0]))
     .catch((err) => console.log("ERROR - GET /api/users/:id - ", err));
 });
 
@@ -221,6 +221,7 @@ apiRouter.patch("/users/:id/check", (req, res) => {
 
 apiRouter.patch("/users/:id/messages/read", (req, res) => {
   const lineUserId = req.params.id;
+
   return knex("messages")
     .where({ line_user_id: lineUserId })
     .update({ unread: 0 })

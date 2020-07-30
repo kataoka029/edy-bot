@@ -21,7 +21,7 @@ exports.seed = function (knex) {
           last_name: "まさみ",
           email: "masami.nagasawa@emptydressy.com",
           image_url:
-            "https://cdn.mainichi.jp/vol1/2020/06/30/20200630dde018200041000p/9.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS4qGsMPG4ENgYhAfmp6_SeuhUGt1u_qpu2Yw&usqp=CAU",
           to_check: 0,
           created_at: "2020-05-24 05:33:57.292593+00",
         },
