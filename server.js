@@ -8,6 +8,7 @@ const corsOption = {
     "http://localhost:3000",
     "http://localhost:5000",
     "https://edy-manager.herokuapp.com",
+    "https://edy-reservation.herokuapp.com/",
   ],
   credentials: true,
 };
