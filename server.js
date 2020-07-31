@@ -6,6 +6,7 @@ const app = express();
 const corsOption = {
   origin: [
     "http://localhost:3000",
+    "http://localhost:3001",
     "https://edy-manager.herokuapp.com",
     "https://edy-reservation.herokuapp.com",
   ],
