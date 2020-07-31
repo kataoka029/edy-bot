@@ -13,7 +13,8 @@ exports.up = function (knex) {
         t.string("remotelock_id").notNullable();
         t.string("key").notNullable();
         t.datetime("purchased_at").notNullable();
-        t.datetime("scheduled_at").notNullable();
+        t.datetime("unlocked_at").notNullable();
+        t.datetime("locked_at").notNullable();
         t.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
       });
     } else {

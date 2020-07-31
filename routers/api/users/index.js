@@ -71,6 +71,17 @@ usersRouter.get("/:id/messages", (req, res) => {
     .catch((err) => console.log("ERROR - GET /api/users/:id/messages - ", err));
 });
 
+usersRouter.get("/:id/orders", (req, res) => {
+  const lineUserId = req.params.id;
+
+  return knex("orders")
+    .where({ line_user_id: lineUserId })
+    .orderBy("unlocked_at", "desc")
+    .select()
+    .then((orders) => res.send(orders))
+    .catch((err) => console.log("ERROR - GET /api/users/:id/orders - ", err));
+});
+
 // POST
 usersRouter.post("/", (req, res) => {
   const profile = req.body;

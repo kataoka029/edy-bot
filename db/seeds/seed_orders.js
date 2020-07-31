@@ -14,7 +14,8 @@ exports.seed = function (knex) {
           remotelock_id: "0787a13f-deec-471a-b272-7ba5a14cea03",
           key: "6165",
           purchased_at: "2020-07-25 19:46:55",
-          scheduled_at: "2020-07-26 08:00:00",
+          unlocked_at: "2020-07-26 08:00:00",
+          locked_at: "2020-08-02 08:00:00",
           created_at: "2020-07-25 19:46:55.292593+00",
         },
         {
@@ -28,7 +29,8 @@ exports.seed = function (knex) {
           remotelock_id: "b3319931-1ff1-4a94-b02b-fed433ca0184",
           key: "5647",
           purchased_at: "2020-07-29 12:43:23",
-          scheduled_at: "2020-07-29 19:00:00",
+          unlocked_at: "2020-07-29 19:00:00",
+          locked_at: "2020-08-05 19:00:00",
           created_at: "2020-07-29 12:43:23.292593+00",
         },
         {
@@ -42,7 +44,8 @@ exports.seed = function (knex) {
           remotelock_id: "5c800abb-7bd8-4af5-afca-360a908d2cee",
           key: "6996",
           purchased_at: "2020-07-30 14:33:43",
-          scheduled_at: "2020-07-31 13:00:00",
+          unlocked_at: "2020-07-31 13:00:00",
+          locked_at: "2020-08-07 13:00:00",
           created_at: "2020-07-30 14:33:43.292593+00",
         },
       ]);
