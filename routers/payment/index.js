@@ -8,13 +8,22 @@ dotenv.config();
 const stripe = require("stripe")(stripeSecretTestKey);
 
 paymentRouter.post("/", async (req, res) => {
+  const unitPrice = req.body.unitPrice;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const phoneNumber = req.body.phoneNumber;
+  const unlockeAt = req.body.unlockeAt;
+  const userNum = req.body.userNum;
+
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: req.body.amount,
+    amount: unitPrice * userNum,
     currency: "jpy",
     metadata: {
-      email: req.body.email,
-      familyName: req.body.familyName,
-      lastName: req.body.lastName,
+      firstName,
+      lastName,
+      phoneNumber,
+      unlockeAt,
+      userNum,
     },
   });
   res.json(paymentIntent);
