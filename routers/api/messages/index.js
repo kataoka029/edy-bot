@@ -8,19 +8,19 @@ const knex = require("knex")(knexConfig);
 const messagesRouter = express.Router();
 
 // GET
-messagesRouter.get("/", () => {
-  return [];
-});
+// messagesRouter.get("/", () => {
+//   return [];
+// });
 
-messagesRouter.get("/:id", (req, res) => {
-  const messageId = req.params.id;
+// messagesRouter.get("/:id", (req, res) => {
+//   const messageId = req.params.id;
 
-  return knex("messages")
-    .where({ line_message_id: messageId })
-    .select()
-    .then((messages) => res.send(messages))
-    .catch((err) => console.log("ERROR - GET /api/messages/:id - ", err));
-});
+//   return knex("messages")
+//     .where({ line_message_id: messageId })
+//     .select()
+//     .then((messages) => res.send(messages))
+//     .catch((err) => console.log("ERROR - GET /api/messages/:id - ", err));
+// });
 
 // POST
 messagesRouter.post("/", (req, res) => {

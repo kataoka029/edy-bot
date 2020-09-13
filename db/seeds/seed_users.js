@@ -35,7 +35,7 @@ exports.seed = function (knex) {
           phone_number: "_",
           email: "_",
           image_url:
-            "https://profile.line-scdn.net/0hnEYKLe3pMWpkMhn6cMtOPVh3PwcTHDciHAZ-CEFgawlOUXBrDFx8DRVnbVlJBH5uDVErCkZlaVJI/preview",
+            "https://profile.line-scdn.net/0hnEYK4MOIMWpkMhgivLtOPVh3PwcTHDciHAZ-CEFgawlOUXBrDFx8DRVnbVlJBH5uDVErCkZlaVJI/preview",
           to_check: 0,
           created_at: "2020-05-24 05:33:57.292595+00",
         },
