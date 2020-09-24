@@ -50,6 +50,16 @@ usersRouter.get("/", (req, res) => {
     .catch((err) => console.log("ERROR - GET /api/users - ", err));
 });
 
+usersRouter.get("/:id", (req, res) => {
+  const lineUserId = req.params.id;
+
+  return knex("users")
+    .where({ line_user_id: lineUserId })
+    .select()
+    .then((users) => res.send(users[0]))
+    .catch((err) => console.log("ERROR - GET /api/users/:id - ", err));
+});
+
 usersRouter.get("/:id/messages", (req, res) => {
   const lineUserId = req.params.id;
 
